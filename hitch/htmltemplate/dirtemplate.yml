@@ -1,0 +1,4 @@
+templated:
+- base.html:
+    content: yes
+    filename: yes

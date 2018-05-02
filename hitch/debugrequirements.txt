@@ -1,0 +1,9 @@
+flake8
+ipython #==1.2.1
+pyzmq
+path.py
+q
+ipykernel
+sure
+ensure
+slugify

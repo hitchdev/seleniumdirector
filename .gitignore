@@ -1,0 +1,10 @@
+build/
+dist/
+.cache
+seleniumdirector.egg-info/
+__pycache__
+*.pyc
+*.kate-swp
+hitch/gen
+hitch/secrets.yml
+tmp/
