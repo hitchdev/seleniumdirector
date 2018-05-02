@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from path import Path
 
 
-
 class Expectation(object):
     def __init__(self, locator, text):
         self.locator = locator
@@ -29,7 +28,6 @@ class text_to_be_present_in_element_contents_or_value(Expectation):
         return self.text in element.text or self.text in element.get_attribute("value")
 
 
-
 class WebElement(object):
     def __init__(self, director, sel_type, identifier):
         self._director = director
@@ -38,7 +36,17 @@ class WebElement(object):
 
     @property
     def _element(self):
-        return self._director.driver.find_element_by_id(self.identifier)
+        if self.sel_type == "id":
+            return self._director.driver.find_element_by_id(self.identifier)
+        elif self.sel_type == "xpath":
+            return self._director.driver.find_element_by_xpath(self.identifier)
+
+    @property
+    def _selector(self):
+        if self.sel_type == "id":
+            return (By.CSS_SELECTOR, "#{0}".format(self.identifier))
+        elif self.sel_type == "xpath":
+            return (By.XPATH, self.identifier)
 
     def send_keys(self, keys):
         self._element.send_keys(keys)
@@ -49,10 +57,9 @@ class WebElement(object):
     def should_contain(self, text):
         WebDriverWait(self._director.driver, self._director.default_timeout).until(
             text_to_be_present_in_element_contents_or_value(
-                (By.CSS_SELECTOR, "#{0}".format(self.identifier)), text
+                self._selector, text
             )
         )
-
 
 
 class WebSelector(object):
@@ -63,8 +70,11 @@ class WebSelector(object):
             MapPattern(
                 Str(),
                 Map({
-                    "appears when": Str(),
-                    "elements": MapPattern(Str(), Str()),
+                    "appears when": Map({"attribute": Str()}) | Str(),
+                    "elements": MapPattern(
+                        Str(),
+                        Map({"attribute": Str()}) | Str(),
+                    ),
                 }),
             )
         ).data
@@ -83,9 +93,21 @@ class WebSelector(object):
         self._current_page = page_name
 
     def _page_selector(self, page_name):
-        seltype, ident = self._selectors[page_name]['appears when'].split("=")
-        return (By.CSS_SELECTOR, "#{0}".format(ident))
+        appears_when = self._selectors[page_name]['appears when']
+        if isinstance(appears_when, dict):
+            if "attribute" in appears_when.keys():
+                key, value = appears_when["attribute"].split("=")
+                return (By.XPATH, "(//*[@{0}='{1}'])[1]".format(key, value))
+        else:
+            seltype, ident = appears_when.split("=")
+            return (By.CSS_SELECTOR, "#{0}".format(ident))
 
     def the(self, name):
-        seltype, ident = self._selectors[self._current_page]['elements'][name].split("=")
-        return WebElement(self, seltype, ident)
+        element_yaml = self._selectors[self._current_page]['elements'][name]
+        if isinstance(element_yaml, dict):
+            if "attribute" in element_yaml.keys():
+                key, value = element_yaml["attribute"].split("=")
+                return WebElement(self, "xpath", "(//*[@{0}='{1}'])[1]".format(key, value))
+        else:
+            seltype, ident = element_yaml.split("=")
+            return WebElement(self, seltype, ident)

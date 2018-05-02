@@ -60,4 +60,39 @@ Login page:
             <div id="id_this_is_a_dashboard_element" class="form-login">
               <h4>Dashboard</h4>  <p id="id_dashboard_message">hello!</a>
             </div>
-            
+    
+    With data attributes:
+      given:
+        selectors.yml: |
+          login:
+            appears when:
+              attribute: data-id=login-page
+            elements:
+              username:
+                attribute: data-id=username
+              password:
+                attribute: data-id=password
+              ok:
+                attribute: data-id=ok
+          dashboard:
+            appears when:
+              attribute: data-id=this-is-a-dashboard-element
+            elements:
+              message:
+                attribute: data-id=this-is-a-message
+      
+        website:
+          index.html: |
+            <div data-id="login-page" class="form-login">
+            <input type="text" data-id="username" class="form-control input-sm chat-input" placeholder="username" /></br>
+            <input type="text" data-id="password" class="form-control input-sm chat-input" placeholder="password" /></br>
+            <div class="wrapper">
+            <span class="group-btn">     
+            <a data-id="ok" href="/dashboard.html" class="btn btn-primary btn-md">login <i class="fa fa-sign-in"></i></a>
+            </span>
+            </div>
+            </div>
+          dashboard.html: |
+            <div data-id="this-is-a-dashboard-element" class="form-login">
+              <h4>Dashboard</h4>  <p data-id="this-is-a-message">hello!</a>
+            </div>

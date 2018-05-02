@@ -259,11 +259,13 @@ def lint():
         "--max-line-length=100",
         "--exclude=__init__.py",
     ).run()
+    """
     python("-m", "flake8")(
         DIR.key.joinpath("key.py"),
         "--max-line-length=100",
         "--exclude=__init__.py",
     ).run()
+    """
     print("Lint success!")
 
 
