@@ -61,6 +61,13 @@ class WebElement(object):
             )
         )
 
+    def should_appear(self):
+        WebDriverWait(self._director.driver, self._director.default_timeout).until(
+            expected_conditions.visibility_of_element_located(
+                self._selector
+            )
+        )
+
 
 class WebSelector(object):
     def __init__(self, driver, selector_file):

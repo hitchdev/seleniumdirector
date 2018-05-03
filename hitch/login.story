@@ -28,5 +28,6 @@ Login page:
       selector.the("password").send_keys("password")
       selector.the("ok").click()
       selector.wait_for_page("dashboard")
+      selector.the("message").should_appear()
       selector.the("message").should_contain("hello!")
       driver.quit()
