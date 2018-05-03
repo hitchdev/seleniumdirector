@@ -73,7 +73,7 @@ class WebSelector(object):
                     "appears when": Map({"attribute": Str()}) | Str(),
                     "elements": MapPattern(
                         Str(),
-                        Map({"attribute": Str()}) | Str(),
+                        Str() | Map({"attribute": Str()}) | Map({"xpath": Str()}),
                     ),
                 }),
             )
@@ -108,6 +108,8 @@ class WebSelector(object):
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
                 return WebElement(self, "xpath", "(//*[@{0}='{1}'])[1]".format(key, value))
+            if "xpath" in element_yaml.keys():
+                return WebElement(self, "xpath", element_yaml['xpath'])
         else:
             seltype, ident = element_yaml.split("=")
             return WebElement(self, seltype, ident)

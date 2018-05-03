@@ -65,7 +65,6 @@ class Engine(BaseEngine):
         self.path.state.mkdir()
 
         self.path.profile = self.path.gen.joinpath("profile")
-        
         dirtemplate.DirTemplate(
             "webapp",
             self.path.key/"htmltemplate",
@@ -78,7 +77,7 @@ class Engine(BaseEngine):
         ).ensure_built()
             
         self.path.state.joinpath("selectors.yml").write_text(self.given['selectors.yml'])
-            
+
         self.server = python("-m", "http.server").in_dir(self.path.state/"webapp").pexpect()
         self.server.expect("Serving HTTP on 0.0.0.0")
 
@@ -242,11 +241,7 @@ def regression():
     Run regression testing - lint and then run all tests.
     """
     lint()
-    doctest()
     storybook = _storybook({}).only_uninherited()
-    storybook.with_params(**{"python version": "2.7.10"})\
-             .filter(lambda story: not story.info['fails on python 2'])\
-             .ordered_by_name().play()
     storybook.with_params(**{"python version": "3.5.0"}).ordered_by_name().play()
 
 
