@@ -3,7 +3,7 @@ certifi==2017.4.17        # via requests
 chardet==3.0.3            # via requests
 click==6.7                # via hitchrun, pip-tools
 colorama==0.3.9           # via hitchrun, hitchstory, prettystack
-commandlib==0.3.2         # via hitchrun, hitchrunpy, icommandlib
+commandlib==0.3.3         # via hitchrun, hitchrunpy, icommandlib
 decorator==4.0.11         # via ipython, traitlets
 dirtemplate==0.1.4
 first==2.0.1              # via pip-tools

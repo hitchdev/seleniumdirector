@@ -14,6 +14,7 @@ from templex import Templex, NonMatching
 from path import Path
 import hitchbuildpy
 import dirtemplate
+import signal
 
 
 def project_build(paths, python_version, selenium_version=None):
@@ -170,7 +171,8 @@ class Engine(BaseEngine):
         IPython.embed()
     
     def tear_down(self):
-        self.server.kill(9)
+        self.server.kill(signal.SIGTERM)
+        self.server.wait()
 
 
 
