@@ -34,3 +34,14 @@ With xpath or attributes:
         <div data-id="this-is-a-dashboard-element" class="form-login">
           <h4>Dashboard</h4>  <p data-id="this-is-a-message">hello!</a>
         </div>
+  steps:
+  - Run: |
+      selector.visit("http://localhost:8000")
+      selector.wait_for_page("login")
+      selector.the("username").send_keys("login")
+      selector.the("password").send_keys("password")
+      selector.the("ok").click()
+      selector.wait_for_page("dashboard")
+      selector.the("message").should_appear()
+      selector.the("message").should_contain("hello!")
+      driver.quit()

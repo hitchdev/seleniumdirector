@@ -20,14 +20,3 @@ Login page:
 
       driver = webdriver.Chrome()
       selector = WebSelector(driver, "selectors.yml")
-  steps:
-  - Run: |
-      selector.visit("http://localhost:8000")
-      selector.wait_for_page("login")
-      selector.the("username").send_keys("login")
-      selector.the("password").send_keys("password")
-      selector.the("ok").click()
-      selector.wait_for_page("dashboard")
-      selector.the("message").should_appear()
-      selector.the("message").should_contain("hello!")
-      driver.quit()

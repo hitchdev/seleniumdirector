@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from strictyaml import load, MapPattern, Str, Map
 from selenium.webdriver.common.by import By
+from seleniumdirector import exceptions
 from path import Path
 
 
@@ -44,7 +45,7 @@ class WebElement(object):
     @property
     def _selector(self):
         if self.sel_type == "id":
-            return (By.CSS_SELECTOR, "#{0}".format(self.identifier))
+            return (By.XPATH, "//*[@id='{0}']".format(self.identifier))
         elif self.sel_type == "xpath":
             return (By.XPATH, self.identifier)
 
@@ -67,6 +68,12 @@ class WebElement(object):
                 self._selector
             )
         )
+        if len(self._director.driver.find_elements_by_xpath(self.identifier)) > 1:
+            raise exceptions.MoreThanOneElement(
+                "More than one element matches your query '{}'.".format(
+                    self.identifier,
+                )
+            )
 
 
 class WebSelector(object):
@@ -107,7 +114,7 @@ class WebSelector(object):
                 return (By.XPATH, "(//*[@{0}='{1}'])[1]".format(key, value))
         else:
             seltype, ident = appears_when.split("=")
-            return (By.CSS_SELECTOR, "#{0}".format(ident))
+            return (By.XPATH, "//*[@id='{0}']".format(ident))
 
     def the(self, name):
         element_yaml = self._selectors[self._current_page]['elements'][name]
@@ -119,4 +126,7 @@ class WebSelector(object):
                 return WebElement(self, "xpath", element_yaml['xpath'])
         else:
             seltype, ident = element_yaml.split("=")
+            if seltype == "id":
+                seltype = "xpath"
+                ident = "//*[@id='{0}']".format(ident)
             return WebElement(self, seltype, ident)

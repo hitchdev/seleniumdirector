@@ -169,7 +169,7 @@ class Engine(BaseEngine):
     def pause(self, message="Pause"):
         import IPython
         IPython.embed()
-    
+
     def tear_down(self):
         self.server.kill(signal.SIGTERM)
         self.server.wait()
@@ -215,6 +215,19 @@ def bdd(*keywords):
     Run stories matching keywords.
     """
     settings = _personal_settings().data
+    _storybook(settings['engine'])\
+        .with_params(**{"python version": settings['params']['python version']})\
+        .only_uninherited()\
+        .shortcut(*keywords).play()
+
+
+@expected(HitchStoryException)
+def rbdd(*keywords):
+    """
+    Run stories matching keywords.
+    """
+    settings = _personal_settings().data
+    settings['rewrite'] = True
     _storybook(settings['engine'])\
         .with_params(**{"python version": settings['params']['python version']})\
         .only_uninherited()\
