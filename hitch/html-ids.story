@@ -3,16 +3,18 @@ Selectors with HTML IDs:
   given:
     selectors.yml: |
       login:
-        appears when: id=id_this_is_a_login_page
+        appears when: login page identifier
         elements:
+          login page identifier: id=id_this_is_a_login_page
           username: id=id_username
           password: id=id_password
           ok: id=id_ok_button
       dashboard:
-        appears when: id=id_this_is_a_dashboard_element
+        appears when: dashboard identifier
         elements:
+          dashboard identifier: id=id_this_is_a_dashboard_element
           message: id=id_dashboard_message
-  
+
     website:
       index.html: |
         <div id="id_this_is_a_login_page" class="form-login">

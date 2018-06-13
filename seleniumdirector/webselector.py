@@ -84,7 +84,7 @@ class WebSelector(object):
             MapPattern(
                 Str(),
                 Map({
-                    "appears when": Map({"attribute": Str()}) | Str(),
+                    "appears when": Str(),
                     "elements": MapPattern(
                         Str(),
                         Str() | Map({"attribute": Str()}) | Map({"xpath": Str()}),
@@ -99,25 +99,12 @@ class WebSelector(object):
         self.driver.get(url)
 
     def wait_for_page(self, page_name):
-        WebDriverWait(self.driver, self.default_timeout).until(
-            expected_conditions.visibility_of_element_located(
-                self._page_selector(page_name)
-            )
-        )
+        appears_when = self._selectors[page_name]['appears when']
+        self._select(appears_when, page_name).should_appear()
         self._current_page = page_name
 
-    def _page_selector(self, page_name):
-        appears_when = self._selectors[page_name]['appears when']
-        if isinstance(appears_when, dict):
-            if "attribute" in appears_when.keys():
-                key, value = appears_when["attribute"].split("=")
-                return (By.XPATH, "(//*[@{0}='{1}'])[1]".format(key, value))
-        else:
-            seltype, ident = appears_when.split("=")
-            return (By.XPATH, "//*[@id='{0}']".format(ident))
-
-    def the(self, name):
-        element_yaml = self._selectors[self._current_page]['elements'][name]
+    def _select(self, name, page):
+        element_yaml = self._selectors[page]['elements'][name]
         if isinstance(element_yaml, dict):
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
@@ -129,4 +116,16 @@ class WebSelector(object):
             if seltype == "id":
                 seltype = "xpath"
                 ident = "//*[@id='{0}']".format(ident)
+            elif seltype == "class":
+                seltype = "xpath"
+                ident = (
+                    "//*[contains("
+                    "concat(' ', normalize-space(@class), ' '), "
+                    "' {} ')]"
+                ).format(ident)
+            else:
+                raise Exception("seltype {} not recognized")
             return WebElement(self, seltype, ident)
+
+    def the(self, name):
+        return self._select(name, self._current_page)

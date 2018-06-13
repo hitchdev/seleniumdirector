@@ -3,9 +3,10 @@ With xpath or attributes:
   given:
     selectors.yml: |
       login:
-        appears when:
-          attribute: data-id=login-page
+        appears when: login page identifier
         elements:
+          login page identifier:
+            attribute: data-id=login-page
           username:
             xpath: (//*[@data-id='username'])[1]
           password:
@@ -13,9 +14,10 @@ With xpath or attributes:
           ok:
             xpath: (//*[@data-id='ok'])[1]
       dashboard:
-        appears when:
-          attribute: data-id=this-is-a-dashboard-element
+        appears when: dashboard identifier
         elements:
+          dashboard identifier:
+            attribute: data-id=this-is-a-dashboard-element
           message:
             xpath: (//*[@data-id='this-is-a-message'])[1]
 
