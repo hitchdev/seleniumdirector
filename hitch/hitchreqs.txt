@@ -1,7 +1,10 @@
+appdirs==1.4.3            # via black
 argcomplete==1.8.2        # via hitchrun
+attrs==18.1.0             # via black
+black==18.6b2
 certifi==2017.4.17        # via requests
 chardet==3.0.3            # via requests
-click==6.7                # via hitchrun, pip-tools
+click==6.7                # via black, hitchrun, pip-tools
 colorama==0.3.9           # via hitchrun, hitchstory, prettystack
 commandlib==0.3.3         # via hitchrun, hitchrunpy, icommandlib
 decorator==4.0.11         # via ipython, traitlets
@@ -54,6 +57,7 @@ simplegeneric==0.8.1      # via ipython
 six==1.10.0               # via pip-tools, prompt-toolkit, python-dateutil, traitlets
 strictyaml==0.11.0
 templex==0.1.1
+toml==0.9.4               # via black
 tornado==4.5.1            # via ipykernel
 tqdm==4.14.0              # via twine
 traitlets==4.3.2          # via ipykernel, ipython, jupyter-client, jupyter-core
