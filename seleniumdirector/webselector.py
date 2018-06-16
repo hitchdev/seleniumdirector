@@ -5,6 +5,10 @@ from strictyaml import load, MapPattern, Str, Map
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
 from path import Path
+import json
+
+
+THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
 class Expectation(object):
@@ -26,7 +30,12 @@ class text_to_be_present_in_element_contents_or_value(Expectation):
     text or its value attribute.
     """
     def check(self, element):
-        return self.text in element.text or self.text in element.get_attribute("value")
+        if self.text in element.text:
+            return True
+        value_attr = element.get_attribute("value")
+        if value_attr is not None:
+            return self.text in value_attr
+        return False
 
 
 class WebElement(object):
@@ -77,7 +86,7 @@ class WebElement(object):
 
 
 class WebSelector(object):
-    def __init__(self, driver, selector_file):
+    def __init__(self, driver, selector_file, fake_time=None):
         self.driver = driver
         self._selectors = load(
             Path(selector_file).text(),
@@ -94,6 +103,28 @@ class WebSelector(object):
         ).data
         self._current_page = None
         self.default_timeout = 5
+        self._use_faketime = False
+        self._faketime = None
+
+        if fake_time is not None:
+            self.driver.command_executor._request(
+                'POST',
+                "{}/session/{}/chromium/send_command_and_get_result".format(
+                    driver.command_executor._url,
+                    driver.session_id,
+                ),
+                json.dumps({
+                    'cmd': "Page.addScriptToEvaluateOnNewDocument",
+                    'params': {
+                        "source": "{}\n{}".format(
+                            THIS_DIRECTORY.joinpath("timemachine.js").text(),
+                            "timemachine.config({timestamp: " + str(
+                                fake_time.timestamp() * 1000
+                            ) + "});"
+                        )
+                    }
+                })
+            )
 
     def visit(self, url):
         self.driver.get(url)

@@ -46,6 +46,7 @@ class Engine(BaseEngine):
             Optional("selenium version"): Str(),
             Optional("website"): MapPattern(Str(), Str()),
             Optional("selectors.yml"): Str(),
+            Optional("javascript"): Str(),
             Optional("setup"): Str(),
             Optional("code"): Str(),
         },
@@ -70,13 +71,15 @@ class Engine(BaseEngine):
             "webapp",
             self.path.key/"htmltemplate",
             self.path.state,
+        ).with_vars(
+            javascript=self.given.get("javascript", "")
         ).with_files(
             base_html={
                 filename: {"content": content} for filename, content in
                 self.given.get("website", {}).items()
             },
         ).ensure_built()
-            
+
         self.path.state.joinpath("selectors.yml").write_text(self.given['selectors.yml'])
 
         self.server = python("-m", "http.server").in_dir(self.path.state/"webapp").pexpect()
