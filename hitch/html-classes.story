@@ -59,7 +59,7 @@ Selectors with HTML classes:
             </div>
             </div>
           dashboard.html: |
-            s<div class="class_this_is_a_dashboard_element form-login">
+            <div class="class_this_is_a_dashboard_element form-login">
               <h4>Dashboard</h4>  <p class="class_dashboard_element">hello!</a>
               <h4>Dashboard</h4>  <p class="class_dashboard_element">hello!</a>
             </div>

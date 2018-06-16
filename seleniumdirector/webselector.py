@@ -97,7 +97,11 @@ class WebSelector(object):
                     "appears when": Str(),
                     "elements": MapPattern(
                         Str(),
-                        Str() | Map({"attribute": Str()}) | Map({"xpath": Str()}),
+                        Str() | \
+                        Map({"attribute": Str()}) | \
+                        Map({"xpath": Str()}) | \
+                        Map({"text contains": Str()}) | \
+                        Map({"text is": Str()}),
                     ),
                 }),
             )
@@ -146,6 +150,22 @@ class WebSelector(object):
                 return WebElement(self, "xpath", "(//*[@{0}='{1}'])[1]".format(key, value))
             if "xpath" in element_yaml.keys():
                 return WebElement(self, "xpath", element_yaml['xpath'])
+            if "text is" in element_yaml.keys():
+                return WebElement(
+                    self,
+                    "xpath",
+                    '(//*[text()="{}"])[1]'.format(
+                        element_yaml['text is']
+                    )
+                )
+            if "text contains" in element_yaml.keys():
+                return WebElement(
+                    self,
+                    "xpath",
+                    '(//*[contains(text(), "{}")])[1]'.format(
+                        element_yaml['text contains']
+                    )
+                )
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":
