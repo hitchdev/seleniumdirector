@@ -1,6 +1,7 @@
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver import Chrome
 from strictyaml import load, MapPattern, Str, Map
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
@@ -107,7 +108,8 @@ class WebSelector(object):
         self._faketime = None
 
         if fake_time is not None:
-            self.driver.command_executor._request(
+            assert isinstance(self.driver, Chrome)
+            response = self.driver.command_executor._request(
                 'POST',
                 "{}/session/{}/chromium/send_command_and_get_result".format(
                     driver.command_executor._url,
@@ -125,6 +127,8 @@ class WebSelector(object):
                     }
                 })
             )
+            assert response['status'] == 0, \
+                "Error faking time {}".format(str(response))
 
     def visit(self, url):
         self.driver.get(url)
