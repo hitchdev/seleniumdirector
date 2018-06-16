@@ -1,7 +1,11 @@
 Fake time:
   description: |
-    This story demonstrates loading a website that uses javascript
-    to get the time and display it on the page.
+    This story demonstrates mocking the browser date and time
+    so that any javascript code or javascript libraries loaded
+    on a page use the time which is fed to the webselector object
+    via python.
+
+    Note that this feature does not affect window.setTimeouts.
   given:
     python version: 3.5.0
     selenium version: 3.11.0
