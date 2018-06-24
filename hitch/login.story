@@ -19,4 +19,4 @@ Login page:
       from selenium import webdriver
 
       driver = webdriver.Chrome()
-      selector = WebDirector(driver, "selectors.yml")
+      selector = WebDirector(driver, "selectors.yml", default_timeout=5)

@@ -9,7 +9,7 @@ THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
 class WebDirector(object):
-    def __init__(self, driver, selector_file, fake_time=None):
+    def __init__(self, driver, selector_file, fake_time=None, default_timeout=5):
         self.driver = driver
         self._selectors = load(
             Path(selector_file).text(),
@@ -32,7 +32,7 @@ class WebDirector(object):
             ),
         ).data
         self._current_page = None
-        self.default_timeout = 5
+        self.default_timeout = default_timeout
         self._use_faketime = False
         self._faketime = None
 
