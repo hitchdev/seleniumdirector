@@ -1,4 +1,4 @@
-from seleniumdirector.webselector import WebSelector
+from seleniumdirector.webdirector import WebDirector
 
 
 __version__ = "DEVELOPMENT_VERSION"

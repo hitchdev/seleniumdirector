@@ -15,8 +15,8 @@ Login page:
     python version: 3.5.0
     selenium version: 3.11.0
     setup: |
-      from seleniumdirector import WebSelector
+      from seleniumdirector import WebDirector
       from selenium import webdriver
 
       driver = webdriver.Chrome()
-      selector = WebSelector(driver, "selectors.yml")
+      selector = WebDirector(driver, "selectors.yml")

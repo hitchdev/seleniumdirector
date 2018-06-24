@@ -26,13 +26,13 @@ Fake time:
           <p id="id_dashboard_message">hello!</a>
         </div>
     setup: |
-      from seleniumdirector import WebSelector
       from selenium import webdriver
       from datetime import datetime
+      import seleniumdirector
 
       driver = webdriver.Chrome()
 
-      selector = WebSelector(
+      selector = seleniumdirector.WebDirector(
           driver,
           "selectors.yml",
           fake_time=datetime(2015, 10, 21, 14, 0, 0),
