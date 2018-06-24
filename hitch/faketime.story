@@ -35,10 +35,10 @@ Fake time:
       selector = seleniumdirector.WebDirector(
           driver,
           "selectors.yml",
-          fake_time=datetime(2015, 10, 21, 14, 0, 0),
+          fake_time=datetime(2015, 10, 21, 7, 28, 0),
       )
   steps:
   - Run: |
       selector.visit("http://localhost:8000")
       selector.wait_for_page("dashboard")
-      selector.the("message").should_contain("Wed Oct 21 2015 14:00:00")
+      selector.the("message").should_contain("Wed Oct 21 2015 07:28:00")
