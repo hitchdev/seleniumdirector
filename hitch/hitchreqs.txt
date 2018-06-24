@@ -1,7 +1,7 @@
 appdirs==1.4.3            # via black
 argcomplete==1.8.2        # via hitchrun
 attrs==18.1.0             # via black
-black==18.6b2
+black==18.6b4
 certifi==2017.4.17        # via requests
 chardet==3.0.3            # via requests
 click==6.7                # via black, hitchrun, pip-tools

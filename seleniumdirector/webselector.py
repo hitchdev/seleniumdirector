@@ -152,7 +152,7 @@ class WebSelector(object):
                             "(//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
                             "' {} ')])[{}]"
-                        ).format(element_yaml['class'], element_yaml.get('which', 1))
+                        ).format(element_yaml["class"], element_yaml.get("which", 1)),
                     )
                 else:
                     return WebElement(
@@ -162,7 +162,7 @@ class WebSelector(object):
                             "//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
                             "' {} ')]"
-                        ).format(element_yaml['class'])
+                        ).format(element_yaml["class"]),
                     )
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
