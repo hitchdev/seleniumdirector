@@ -2,7 +2,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import Chrome
-from strictyaml import load, MapPattern, Str, Map
+from strictyaml import load, MapPattern, Optional, Str, Map, Int
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
 from path import Path
@@ -94,6 +94,7 @@ class WebSelector(object):
                         "elements": MapPattern(
                             Str(),
                             Str()
+                            | Map({"class": Str(), Optional("which"): Int()})
                             | Map({"attribute": Str()})
                             | Map({"xpath": Str()})
                             | Map({"text contains": Str()})
@@ -142,6 +143,27 @@ class WebSelector(object):
     def _select(self, name, page):
         element_yaml = self._selectors[page]["elements"][name]
         if isinstance(element_yaml, dict):
+            if "class" in element_yaml.keys():
+                if "which" in element_yaml.keys():
+                    return WebElement(
+                        self,
+                        "xpath",
+                        (
+                            "(//*[contains("
+                            "concat(' ', normalize-space(@class), ' '), "
+                            "' {} ')])[{}]"
+                        ).format(element_yaml['class'], element_yaml.get('which', 1))
+                    )
+                else:
+                    return WebElement(
+                        self,
+                        "xpath",
+                        (
+                            "//*[contains("
+                            "concat(' ', normalize-space(@class), ' '), "
+                            "' {} ')]"
+                        ).format(element_yaml['class'])
+                    )
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
                 return WebElement(
@@ -176,7 +198,7 @@ class WebSelector(object):
                     "' {} ')]"
                 ).format(ident)
             else:
-                raise Exception("seltype {} not recognized")
+                raise Exception("seltype {} not recognized".format(ident))
             return WebElement(self, seltype, ident)
 
     def the(self, name):
