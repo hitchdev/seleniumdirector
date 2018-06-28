@@ -8,7 +8,7 @@ Selectors using HTML contents:
       login:
         appears when: login page identifier
         elements:
-          login page identifier: class=class_this_is_a_login_page
+          login page identifier: class=class_username
           username: class=class_username
           password: class=class_password
           login:
@@ -22,7 +22,7 @@ Selectors using HTML contents:
 
     website:
       index.html: |
-        <div class="class_this_is_a_login_page form-login">
+        <div class="form-login">
         <input type="text" class="class_username form-control input-sm chat-input" placeholder="username" /></br>
         <input type="text" class="class_password form-control input-sm chat-input" placeholder="password" /></br>
         <div class="wrapper">
@@ -33,9 +33,9 @@ Selectors using HTML contents:
         </div>
         </div>
       dashboard.html: |
-        <div class="class_this_is_a_dashboard_element form-login">
+        <div class="form-login">
           <h4>Dashboard</h4>
-          <p>hello!</p>
+          <p class="class_this_is_a_dashboard_element">hello!</p>
         </div>
 
   variations:
@@ -48,6 +48,6 @@ Selectors using HTML contents:
           selector.the("password").send_keys("password")
           selector.the("login").click()
           selector.wait_for_page("dashboard")
-          selector.the("message").should_appear()
+          selector.the("message").should_be_on_page()
           selector.the("message").should_contain("hello!")
           driver.quit()

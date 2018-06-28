@@ -4,3 +4,7 @@ class SeleniumDirectorException(Exception):
 
 class MoreThanOneElement(SeleniumDirectorException):
     pass
+
+
+class ElementCoveredByAnotherElement(SeleniumDirectorException):
+    pass

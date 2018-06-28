@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
+import time
 
 
 class Expectation(object):
@@ -64,11 +65,48 @@ class WebElement(object):
             text_to_be_present_in_element_contents_or_value(self._selector, text)
         )
 
-    def should_appear(self):
+    def should_be_on_page(self):
+        """
+        Ensure is on the page and display:none is not set.
+        """
         WebDriverWait(self._director.driver, self._director.default_timeout).until(
             expected_conditions.visibility_of_element_located(self._selector)
         )
         if len(self._director.driver.find_elements_by_xpath(self.identifier)) > 1:
             raise exceptions.MoreThanOneElement(
-                "More than one element matches your query '{}'.".format(self.identifier)
+                "More than one element matches your query '{}'.".format(
+                    self._selector[1]
+                )
+            )
+
+    def should_be_on_top(self):
+        start_time = time.time()
+        self.should_be_on_page()
+        continue_for_how_long = self._director.default_timeout - (
+            time.time() - start_time
+        )
+
+        for i in range(0, int(continue_for_how_long * 10.0)):
+            element_coordinates = self._element.location
+            element_at_coordinates = self._director.driver.execute_script(
+                "return document.elementFromPoint({}, {})".format(
+                    element_coordinates["x"] + 1, element_coordinates["y"] + 1
+                )
+            )
+            if self._element.id == element_at_coordinates.id:
+                break
+            time.sleep(0.1)
+
+        total_duration = time.time() - start_time
+
+        if total_duration > self._director.default_timeout:
+            raise exceptions.ElementCoveredByAnotherElement((
+                    "Another element, a '{}' with id '{}' "
+                    "and class '{}' is covering yours '{}'."
+                ).format(
+                    element_at_coordinates.tag_name,
+                    element_at_coordinates.get_attribute("id"),
+                    element_at_coordinates.get_attribute("class"),
+                    self._selector[1],
+                )
             )

@@ -64,7 +64,7 @@ class WebDirector(object):
 
     def wait_for_page(self, page_name):
         appears_when = self._selectors[page_name]["appears when"]
-        self._select(appears_when, page_name).should_appear()
+        self._select(appears_when, page_name).should_be_on_page()
         self._current_page = page_name
 
     def _select(self, name, page):
