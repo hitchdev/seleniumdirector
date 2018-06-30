@@ -30,14 +30,42 @@ Overlay - should_be_on_top:
 
       driver = webdriver.Chrome()
 
-      selector = seleniumdirector.WebDirector(
+      director = seleniumdirector.WebDirector(
           driver,
           "selectors.yml",
           fake_time=datetime(2015, 10, 21, 7, 28, 0),
       )
-  steps:
-  - Run: |
-      selector.visit("http://localhost:8000")
-      selector.wait_for_page("dashboard")
-      selector.the("message").should_be_on_top()
-      selector.the("message").click()
+  variations:
+    Success:
+      given:
+        javascript: |
+          $(document).ready(function() {
+            displayOverlay("Loading...")
+            setTimeout(function(){ removeOverlay(); }, 1000);
+          })
+      steps:
+      - Run: |
+          director.visit("http://localhost:8000")
+          director.wait_for_page("dashboard")
+          director.the("message").should_be_on_top()
+          director.the("message").click()
+
+    Failure:
+      given:
+        javascript: |
+          $(document).ready(function() {
+            displayOverlay("Loading...")
+            setTimeout(function(){ removeOverlay(); }, 1000);
+          })
+      steps:
+      - Run:
+          code: |
+            director.default_timeout = 0.5
+            director.visit("http://localhost:8000")
+            director.wait_for_page("dashboard")
+            director.the("message").should_be_on_top()
+            director.the("message").click()
+          raises:
+            type: seleniumdirector.exceptions.ElementCoveredByAnotherElement
+            message: |-
+              Another element, a 'td' with id '' and class '' is covering yours '//*[@id='id_dashboard_message']'.
