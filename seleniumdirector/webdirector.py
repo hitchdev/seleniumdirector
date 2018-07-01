@@ -24,7 +24,10 @@ class WebDirector(object):
                             | Map({"class": Str(), Optional("which"): Enum(["last"]) | Int()})
                             | Map({"attribute": Str()})
                             | Map({"xpath": Str()})
-                            | Map({"text contains": Str()})
+                            | Map({
+                                "text contains": Str(),
+                                Optional("which"): Enum(["last"]) | Int()
+                            })
                             | Map({"text is": Str()}),
                         ),
                     }
@@ -108,13 +111,13 @@ class WebDirector(object):
                     '(//*[text()="{}"])[1]'.format(element_yaml["text is"]),
                 )
             if "text contains" in element_yaml.keys():
-                return WebElement(
-                    self,
-                    "xpath",
-                    '(//*[contains(text(), "{}")])[1]'.format(
-                        element_yaml["text contains"]
-                    ),
-                )
+                xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
+                if "which" in element_yaml.keys():
+                    xpath = "({})[{}]".format(
+                        xpath,
+                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                    )
+                return WebElement(self, "xpath", xpath)
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":

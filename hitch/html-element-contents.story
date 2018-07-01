@@ -16,9 +16,15 @@ Selectors using HTML contents:
       dashboard:
         appears when: dashboard identifier
         elements:
-          dashboard identifier: class=class_this_is_a_dashboard_element
-          message:
+          dashboard identifier:
+            class: class_this_is_a_dashboard_element
+            which: 1
+          first message:
             text contains: hello
+            which: 1
+          last message:
+            text contains: hello
+            which: last
 
     website:
       index.html: |
@@ -35,7 +41,8 @@ Selectors using HTML contents:
       dashboard.html: |
         <div class="form-login">
           <h4>Dashboard</h4>
-          <p class="class_this_is_a_dashboard_element">hello!</p>
+          <p class="class_this_is_a_dashboard_element">hello tom!</p>
+          <p class="class_this_is_a_dashboard_element">hello harry!</p>
         </div>
 
   variations:
@@ -48,6 +55,7 @@ Selectors using HTML contents:
           selector.the("password").send_keys("password")
           selector.the("login").click()
           selector.wait_for_page("dashboard")
-          selector.the("message").should_be_on_page()
-          selector.the("message").should_contain("hello!")
+          selector.the("first message").should_be_on_page()
+          selector.the("first message").should_contain("hello tom!")
+          selector.the("last message").should_contain("hello harry!")
           driver.quit()
