@@ -2,6 +2,9 @@ Selectors using HTML contents:
   description: |
     This story demonstrates using the textual content of
     HTML elements to select them.
+    
+    Either "text is" to match the text exactly or "text contains"
+    to match some element of the text.
   based on: login page
   given:
     selectors.yml: |
@@ -13,6 +16,7 @@ Selectors using HTML contents:
           password: class=class_password
           login:
             text is: login
+            which: 2
       dashboard:
         appears when: dashboard identifier
         elements:
@@ -29,6 +33,7 @@ Selectors using HTML contents:
     website:
       index.html: |
         <div class="form-login">
+        <div>login</div>
         <input type="text" class="class_username form-control input-sm chat-input" placeholder="username" /></br>
         <input type="text" class="class_password form-control input-sm chat-input" placeholder="password" /></br>
         <div class="wrapper">

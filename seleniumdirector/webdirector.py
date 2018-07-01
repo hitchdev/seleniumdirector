@@ -28,7 +28,9 @@ class WebDirector(object):
                                 "text contains": Str(),
                                 Optional("which"): Enum(["last"]) | Int()
                             })
-                            | Map({"text is": Str()}),
+                            | Map({"text is": Str(),
+                                Optional("which"): Enum(["last"]) | Int()
+                            })
                         ),
                     }
                 ),
@@ -109,11 +111,13 @@ class WebDirector(object):
             if "xpath" in element_yaml.keys():
                 return WebElement(self, "xpath", element_yaml["xpath"])
             if "text is" in element_yaml.keys():
-                return WebElement(
-                    self,
-                    "xpath",
-                    '(//*[text()="{}"])[1]'.format(element_yaml["text is"]),
-                )
+                xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
+                if "which" in element_yaml.keys():
+                    xpath = "({})[{}]".format(
+                        xpath,
+                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                    )
+                return WebElement(self, "xpath", xpath)
             if "text contains" in element_yaml.keys():
                 xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
                 if "which" in element_yaml.keys():
