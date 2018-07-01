@@ -78,27 +78,15 @@ class WebDirector(object):
         element_yaml = self._selectors[page]["elements"][name]
         if isinstance(element_yaml, dict):
             if "class" in element_yaml.keys():
+                xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
+                    element_yaml['class']
+                )
                 if "which" in element_yaml.keys():
-                    return WebElement(
-                        self, name, page,
-                        (
-                            "(//*[contains("
-                            "concat(' ', normalize-space(@class), ' '), "
-                            "' {} ')])[{}]"
-                        ).format(
-                            element_yaml["class"],
-                            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-                        ),
+                    xpath = "({})[{}]".format(
+                        xpath,
+                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                else:
-                    return WebElement(
-                        self, name, page,
-                        (
-                            "//*[contains("
-                            "concat(' ', normalize-space(@class), ' '), "
-                            "' {} ')]"
-                        ).format(element_yaml["class"])
-                    )
+                return WebElement(self, name, page, xpath)
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
                 xpath = "//*[@{0}='{1}']".format(key, value)
