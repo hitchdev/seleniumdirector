@@ -8,3 +8,7 @@ class MoreThanOneElement(SeleniumDirectorException):
 
 class ElementCoveredByAnotherElement(SeleniumDirectorException):
     pass
+
+
+class NotFoundInSelectors(SeleniumDirectorException):
+    pass

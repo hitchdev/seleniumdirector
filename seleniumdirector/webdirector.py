@@ -1,6 +1,7 @@
-from seleniumdirector.webelement import WebElement
-from selenium.webdriver import Chrome
 from strictyaml import load, MapPattern, Optional, Enum, Str, Map, Int
+from seleniumdirector.webelement import WebElement
+from seleniumdirector import exceptions
+from selenium.webdriver import Chrome
 from path import Path
 import json
 
@@ -20,17 +21,13 @@ class WebDirector(object):
                         "appears when": Str(),
                         "elements": MapPattern(
                             Str(),
-                            Str()
-                            | Map({"class": Str(), Optional("which"): Enum(["last"]) | Int()})
-                            | Map({"attribute": Str(), Optional("which"): Enum(["last"]) | Int()})
-                            | Map({"xpath": Str()})
-                            | Map({
-                                "text contains": Str(),
-                                Optional("which"): Enum(["last"]) | Int()
-                            })
-                            | Map({
-                                "text is": Str(),
-                                Optional("which"): Enum(["last"]) | Int()
+                            Str() | Map({
+                                Optional("which"): Enum(["last"]) | Int(),
+                                Optional("class"): Str(),
+                                Optional("attribute"): Str(),
+                                Optional("xpath"): Str(),
+                                Optional("text contains"): Str(),
+                                Optional("text is"): Str(),
                             })
                         ),
                     }
@@ -74,6 +71,10 @@ class WebDirector(object):
         self._current_page = page_name
 
     def _select(self, name, page):
+        if name not in self._selectors[page]["elements"]:
+            raise exceptions.NotFoundInSelectors(
+                "'{}' not found in selectors file for page '{}'.".format(name, page)
+            )
         element_yaml = self._selectors[page]["elements"][name]
         if isinstance(element_yaml, dict):
             if "class" in element_yaml.keys():
