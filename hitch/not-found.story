@@ -33,7 +33,7 @@ Ok button not found:
               'ok' not found in selectors file for page 'login'.
 
 
-    timeout:
+    timeout implicit:
       steps:
       - Run:
           code: |
@@ -44,3 +44,15 @@ Ok button not found:
             type: seleniumdirector.exceptions.ElementDidNotAppear
             message: |-
               Could not find 'nonexistent' on page 'login' using xpath '//*[@id='not_there']' after default timeout of 5 seconds.
+
+    timeout explicit:
+      steps:
+      - Run:
+          code: |
+            selector.visit("http://localhost:8000")
+            selector.wait_for_page("login")
+            selector.the("nonexistent").should_be_on_page()
+          raises:
+            type: seleniumdirector.exceptions.ElementDidNotAppear
+            message: |-
+              Could not find 'nonexistent' on page 'login' using xpath '//*[@id='not_there']' after timeout of 5 seconds.

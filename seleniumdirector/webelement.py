@@ -78,9 +78,20 @@ class WebElement(object):
         """
         Ensure is on the page and display:none is not set.
         """
-        WebDriverWait(self._director.driver, self._director.default_timeout).until(
-            expected_conditions.visibility_of_element_located(self._selector)
-        )
+        timeout = self._director.default_timeout
+        try:
+            WebDriverWait(self._director.driver, timeout).until(
+                expected_conditions.visibility_of_element_located(self._selector)
+            )
+        except seleniumexceptions.TimeoutException:
+            raise exceptions.ElementDidNotAppear((
+                "Could not find '{}' on page '{}' using xpath '{}' "
+                "after timeout of {} seconds.").format(
+                    self.name,
+                    self.page,
+                    self.xpath,
+                    timeout,
+                ))
         if len(self._director.driver.find_elements_by_xpath(self.xpath)) > 1:
             raise exceptions.MoreThanOneElement(
                 "More than one element matches your query '{}'.".format(
