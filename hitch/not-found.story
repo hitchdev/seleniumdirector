@@ -6,6 +6,7 @@ Ok button not found:
         appears when: login page identifier
         elements:
           login page identifier: id=id_username
+          login button: id=id_ok_button
           nonexistent: id=not_there
     website:
       index.html: |
@@ -33,7 +34,7 @@ Ok button not found:
               'ok' not found in selectors file for page 'login'.
 
 
-    timeout implicit:
+    timeout to appear on implicit wait:
       steps:
       - Run:
           code: |
@@ -45,7 +46,7 @@ Ok button not found:
             message: |-
               Could not find 'nonexistent' on page 'login' using xpath '//*[@id='not_there']' after default timeout of 5 seconds.
 
-    timeout explicit:
+    timeout to appear on explicit wait:
       steps:
       - Run:
           code: |
@@ -56,3 +57,23 @@ Ok button not found:
             type: seleniumdirector.exceptions.ElementDidNotAppear
             message: |-
               Could not find 'nonexistent' on page 'login' using xpath '//*[@id='not_there']' after timeout of 5 seconds.
+
+    timeout on element containing text:
+      steps:
+      - Run:
+          code: |
+            selector.visit("http://localhost:8000")
+            selector.wait_for_page("login")
+            selector.the("login button").should_contain("logout")
+          raises:
+            type: seleniumdirector.exceptions.ElementDidNotContain
+            message: |-
+              Element 'login button' on page 'login' using xpath '//*[@id='id_ok_button']' contained:
+
+              login
+
+              not:
+
+              logout
+
+              after timeout of 5 seconds.

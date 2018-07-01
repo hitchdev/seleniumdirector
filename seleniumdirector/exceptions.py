@@ -16,3 +16,7 @@ class NotFoundInSelectors(SeleniumDirectorException):
 
 class ElementDidNotAppear(SeleniumDirectorException):
     pass
+
+
+class ElementDidNotContain(SeleniumDirectorException):
+    pass

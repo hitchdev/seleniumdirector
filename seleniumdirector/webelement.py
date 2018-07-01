@@ -70,9 +70,25 @@ class WebElement(object):
         self.element.click()
 
     def should_contain(self, text):
-        WebDriverWait(self._director.driver, self._director.default_timeout).until(
-            text_to_be_present_in_element_contents_or_value(self._selector, text)
-        )
+        timeout = self._director.default_timeout
+        start_time = time.time()
+        self.should_be_on_page()
+        continue_for_how_long = timeout - (time.time() - start_time)
+        try:
+            WebDriverWait(self._director.driver, continue_for_how_long).until(
+                text_to_be_present_in_element_contents_or_value(self._selector, text)
+            )
+        except seleniumexceptions.TimeoutException:
+            raise exceptions.ElementDidNotContain((
+                "Element '{}' on page '{}' using xpath '{}' "
+                "contained:\n\n{}\n\nnot:\n\n{}\n\nafter timeout of {} seconds.").format(
+                    self.name,
+                    self.page,
+                    self.xpath,
+                    self.element.text,
+                    text,
+                    timeout,
+                ))
 
     def should_be_on_page(self):
         """
