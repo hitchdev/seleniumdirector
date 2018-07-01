@@ -1,6 +1,6 @@
 from seleniumdirector.webelement import WebElement
 from selenium.webdriver import Chrome
-from strictyaml import load, MapPattern, Optional, Str, Map, Int
+from strictyaml import load, MapPattern, Optional, Enum, Str, Map, Int
 from path import Path
 import json
 
@@ -21,7 +21,7 @@ class WebDirector(object):
                         "elements": MapPattern(
                             Str(),
                             Str()
-                            | Map({"class": Str(), Optional("which"): Int()})
+                            | Map({"class": Str(), Optional("which"): Enum(["last"]) | Int()})
                             | Map({"attribute": Str()})
                             | Map({"xpath": Str()})
                             | Map({"text contains": Str()})
@@ -79,7 +79,10 @@ class WebDirector(object):
                             "(//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
                             "' {} ')])[{}]"
-                        ).format(element_yaml["class"], element_yaml.get("which", 1)),
+                        ).format(
+                            element_yaml["class"],
+                            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                        ),
                     )
                 else:
                     return WebElement(

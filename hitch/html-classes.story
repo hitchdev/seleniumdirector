@@ -79,7 +79,7 @@ Selectors with HTML classes:
               More than one element matches your query '//*[contains(concat(' ', normalize-space(@class), ' '), ' class_dashboard_element ')]'.
 
 
-    More than one element with a class - select the first:
+    More than one element with a class - select the first and last:
       given:
         selectors.yml: |
           login:
@@ -94,9 +94,12 @@ Selectors with HTML classes:
             elements:
               dashboard identifier:
                 class: class_this_is_a_dashboard_element
-              message:
+              first message:
                 class: class_dashboard_element
                 which: 1
+              last message:
+                class: class_dashboard_element
+                which: last
         website:
           index.html: |
             <div class="class_this_is_a_login_page form-login">
@@ -111,7 +114,7 @@ Selectors with HTML classes:
           dashboard.html: |
             <div class="class_this_is_a_dashboard_element form-login">
               <h4>Dashboard</h4>  <p class="class_dashboard_element">hello!</a>
-              <h4>Dashboard</h4>  <p class="class_dashboard_element">hello!</a>
+              <h4>Dashboard</h4>  <p class="class_dashboard_element">goodbye!</a>
             </div>
       steps:
       - Run: |
@@ -121,6 +124,7 @@ Selectors with HTML classes:
           selector.the("password").send_keys("password")
           selector.the("ok").click()
           selector.wait_for_page("dashboard")
-          selector.the("message").should_be_on_page()
-          selector.the("message").should_contain("hello!")
+          selector.the("first message").should_be_on_page()
+          selector.the("first message").should_contain("hello!")
+          selector.the("last message").should_contain("goodbye!")
           driver.quit()
