@@ -22,7 +22,7 @@ class Expectation(object):
 class text_to_be_present_in_element_contents_or_value(Expectation):
     """
     An expectation for checking if the given text is present in the element's
-    text or its value attribute.
+    text (e.g. for a div) or its value attribute (e.g. for an input box).
     """
 
     def check(self, element):
@@ -35,30 +35,27 @@ class text_to_be_present_in_element_contents_or_value(Expectation):
 
 
 class WebElement(object):
-    def __init__(self, director, sel_type, identifier):
+    def __init__(self, director, xpath):
         self._director = director
-        self.sel_type = sel_type
-        self.identifier = identifier
+        self.xpath = xpath
 
     @property
     def _element(self):
-        if self.sel_type == "id":
-            return self._director.driver.find_element_by_id(self.identifier)
-        elif self.sel_type == "xpath":
-            return self._director.driver.find_element_by_xpath(self.identifier)
+        return self._director.driver.find_element_by_xpath(self.xpath)
+
+    @property
+    def element(self):
+        return self._element
 
     @property
     def _selector(self):
-        if self.sel_type == "id":
-            return (By.XPATH, "//*[@id='{0}']".format(self.identifier))
-        elif self.sel_type == "xpath":
-            return (By.XPATH, self.identifier)
+        return (By.XPATH, self.xpath)
 
     def send_keys(self, keys):
-        self._element.send_keys(keys)
+        self.element.send_keys(keys)
 
     def click(self):
-        self._element.click()
+        self.element.click()
 
     def should_contain(self, text):
         WebDriverWait(self._director.driver, self._director.default_timeout).until(
@@ -72,7 +69,7 @@ class WebElement(object):
         WebDriverWait(self._director.driver, self._director.default_timeout).until(
             expected_conditions.visibility_of_element_located(self._selector)
         )
-        if len(self._director.driver.find_elements_by_xpath(self.identifier)) > 1:
+        if len(self._director.driver.find_elements_by_xpath(self.xpath)) > 1:
             raise exceptions.MoreThanOneElement(
                 "More than one element matches your query '{}'.".format(
                     self._selector[1]
@@ -80,6 +77,13 @@ class WebElement(object):
             )
 
     def should_be_on_top(self):
+        """
+        Wait for element to:
+
+        * Be on the page (e.g. created and put on to the DOM by javascript).
+        * Not set to be invisible (i.e. display:none isn't set).
+        * No other element to cover it.
+        """
         start_time = time.time()
         self.should_be_on_page()
         continue_for_how_long = self._director.default_timeout - (
@@ -87,13 +91,13 @@ class WebElement(object):
         )
 
         for i in range(0, int(continue_for_how_long * 10.0)):
-            element_coordinates = self._element.location
+            element_coordinates = self.element.location
             element_at_coordinates = self._director.driver.execute_script(
                 "return document.elementFromPoint({}, {})".format(
                     element_coordinates["x"] + 1, element_coordinates["y"] + 1
                 )
             )
-            if self._element.id == element_at_coordinates.id:
+            if self.element.id == element_at_coordinates.id:
                 break
             time.sleep(0.1)
 

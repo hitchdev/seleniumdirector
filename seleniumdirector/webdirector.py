@@ -28,7 +28,8 @@ class WebDirector(object):
                                 "text contains": Str(),
                                 Optional("which"): Enum(["last"]) | Int()
                             })
-                            | Map({"text is": Str(),
+                            | Map({
+                                "text is": Str(),
                                 Optional("which"): Enum(["last"]) | Int()
                             })
                         ),
@@ -79,7 +80,6 @@ class WebDirector(object):
                 if "which" in element_yaml.keys():
                     return WebElement(
                         self,
-                        "xpath",
                         (
                             "(//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
@@ -92,7 +92,6 @@ class WebDirector(object):
                 else:
                     return WebElement(
                         self,
-                        "xpath",
                         (
                             "//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
@@ -107,9 +106,7 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, "xpath", xpath)
-            if "xpath" in element_yaml.keys():
-                return WebElement(self, "xpath", element_yaml["xpath"])
+                return WebElement(self, xpath)
             if "text is" in element_yaml.keys():
                 xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
                 if "which" in element_yaml.keys():
@@ -117,7 +114,7 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, "xpath", xpath)
+                return WebElement(self, xpath)
             if "text contains" in element_yaml.keys():
                 xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
                 if "which" in element_yaml.keys():
@@ -125,22 +122,23 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, "xpath", xpath)
+                return WebElement(self, xpath)
+            if "xpath" in element_yaml.keys():
+                return WebElement(self, element_yaml["xpath"])
+            else:
+                raise Exception("Bad identifier found")
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":
-                seltype = "xpath"
-                ident = "//*[@id='{0}']".format(ident)
+                return WebElement(self, "//*[@id='{0}']".format(ident))
             elif seltype == "class":
-                seltype = "xpath"
-                ident = (
+                return WebElement(self, (
                     "//*[contains("
                     "concat(' ', normalize-space(@class), ' '), "
                     "' {} ')]"
-                ).format(ident)
+                ).format(ident))
             else:
                 raise Exception("seltype {} not recognized".format(ident))
-            return WebElement(self, seltype, ident)
 
     def the(self, name):
         return self._select(name, self._current_page)
