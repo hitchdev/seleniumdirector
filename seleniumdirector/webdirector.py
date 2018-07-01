@@ -80,7 +80,7 @@ class WebDirector(object):
             if "class" in element_yaml.keys():
                 if "which" in element_yaml.keys():
                     return WebElement(
-                        self,
+                        self, name, page,
                         (
                             "(//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
@@ -92,12 +92,12 @@ class WebDirector(object):
                     )
                 else:
                     return WebElement(
-                        self,
+                        self, name, page,
                         (
                             "//*[contains("
                             "concat(' ', normalize-space(@class), ' '), "
                             "' {} ')]"
-                        ).format(element_yaml["class"]),
+                        ).format(element_yaml["class"])
                     )
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
@@ -107,7 +107,7 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, xpath)
+                return WebElement(self, name, page, xpath)
             if "text is" in element_yaml.keys():
                 xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
                 if "which" in element_yaml.keys():
@@ -115,7 +115,7 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, xpath)
+                return WebElement(self, name, page, xpath)
             if "text contains" in element_yaml.keys():
                 xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
                 if "which" in element_yaml.keys():
@@ -123,17 +123,17 @@ class WebDirector(object):
                         xpath,
                         element_yaml['which'] if element_yaml['which'] != "last" else "last()"
                     )
-                return WebElement(self, xpath)
+                return WebElement(self, name, page, xpath)
             if "xpath" in element_yaml.keys():
-                return WebElement(self, element_yaml["xpath"])
+                return WebElement(self, name, page, element_yaml["xpath"])
             else:
                 raise Exception("Bad identifier found")
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":
-                return WebElement(self, "//*[@id='{0}']".format(ident))
+                return WebElement(self, name, page, "//*[@id='{0}']".format(ident))
             elif seltype == "class":
-                return WebElement(self, (
+                return WebElement(self, name, page, (
                     "//*[contains("
                     "concat(' ', normalize-space(@class), ' '), "
                     "' {} ')]"

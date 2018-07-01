@@ -12,3 +12,7 @@ class ElementCoveredByAnotherElement(SeleniumDirectorException):
 
 class NotFoundInSelectors(SeleniumDirectorException):
     pass
+
+
+class ElementDidNotAppear(SeleniumDirectorException):
+    pass

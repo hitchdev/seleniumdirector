@@ -1,6 +1,6 @@
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common import exceptions as seleniumexceptions
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
 import time
@@ -15,7 +15,7 @@ class Expectation(object):
         try:
             element = expected_conditions._find_element(driver, self.locator)
             return self.check(element)
-        except StaleElementReferenceException:
+        except seleniumexceptions.StaleElementReferenceException:
             return False
 
 
@@ -35,13 +35,25 @@ class text_to_be_present_in_element_contents_or_value(Expectation):
 
 
 class WebElement(object):
-    def __init__(self, director, xpath):
+    def __init__(self, director, name, page, xpath):
         self._director = director
+        self.name = name
+        self.page = page
         self.xpath = xpath
 
     @property
     def _element(self):
-        return self._director.driver.find_element_by_xpath(self.xpath)
+        try:
+            return self._director.driver.find_element_by_xpath(self.xpath)
+        except seleniumexceptions.NoSuchElementException:
+            raise exceptions.ElementDidNotAppear((
+                "Could not find '{}' on page '{}' using xpath '{}' "
+                "after default timeout of {} seconds.").format(
+                    self.name,
+                    self.page,
+                    self.xpath,
+                    self._director.default_timeout,
+                ))
 
     @property
     def element(self):
