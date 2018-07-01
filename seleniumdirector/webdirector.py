@@ -22,7 +22,7 @@ class WebDirector(object):
                             Str(),
                             Str()
                             | Map({"class": Str(), Optional("which"): Enum(["last"]) | Int()})
-                            | Map({"attribute": Str()})
+                            | Map({"attribute": Str(), Optional("which"): Enum(["last"]) | Int()})
                             | Map({"xpath": Str()})
                             | Map({
                                 "text contains": Str(),
@@ -99,9 +99,13 @@ class WebDirector(object):
                     )
             if "attribute" in element_yaml.keys():
                 key, value = element_yaml["attribute"].split("=")
-                return WebElement(
-                    self, "xpath", "(//*[@{0}='{1}'])[1]".format(key, value)
-                )
+                xpath = "//*[@{0}='{1}']".format(key, value)
+                if "which" in element_yaml.keys():
+                    xpath = "({})[{}]".format(
+                        xpath,
+                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                    )
+                return WebElement(self, "xpath", xpath)
             if "xpath" in element_yaml.keys():
                 return WebElement(self, "xpath", element_yaml["xpath"])
             if "text is" in element_yaml.keys():
