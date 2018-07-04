@@ -1,11 +1,11 @@
 Selectors using HTML contents:
+  based on: default
   description: |
     This story demonstrates using the textual content of
     HTML elements to select them.
     
     Either "text is" to match the text exactly or "text contains"
     to match some element of the text.
-  based on: login page
   given:
     selectors.yml: |
       login:

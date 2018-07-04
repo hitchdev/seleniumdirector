@@ -1,5 +1,5 @@
 Selectors with HTML classes:
-  based on: login page
+  based on: default
   given:
     selectors.yml: |
       login:

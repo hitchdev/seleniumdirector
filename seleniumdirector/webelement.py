@@ -90,11 +90,14 @@ class WebElement(object):
                     timeout,
                 ))
 
-    def should_be_on_page(self):
+    def should_be_on_page(self, after=None):
         """
         Ensure is on the page and display:none is not set.
+
+        Specify 'after' to wait for a specific duration in seconds. By default
+        it waits for default_timeout seconds.
         """
-        timeout = self._director.default_timeout
+        timeout = after if after is not None else self._director.default_timeout
         try:
             WebDriverWait(self._director.driver, timeout).until(
                 expected_conditions.visibility_of_element_located(self._selector)
@@ -115,17 +118,21 @@ class WebElement(object):
                 )
             )
 
-    def should_be_on_top(self):
+    def should_be_on_top(self, after=None):
         """
-        Wait for element to:
+        Waits for element to:
 
-        * Be on the page (e.g. created and put on to the DOM by javascript).
+        * Be on the page (e.g. either just be there or put on to the DOM by javascript).
         * Not set to be invisible (i.e. display:none isn't set).
-        * No other element to cover it.
+        * Not be covered by another element (e.g. an overlay).
+
+        Specify 'after' to wait for a specific duration in seconds. By default
+        it waits for default_timeout seconds.
         """
         start_time = time.time()
-        self.should_be_on_page()
-        continue_for_how_long = self._director.default_timeout - (
+        self.should_be_on_page(after=after)
+        timeout = after if after is not None else self._director.default_timeout
+        continue_for_how_long = timeout - (
             time.time() - start_time
         )
 
@@ -142,7 +149,7 @@ class WebElement(object):
 
         total_duration = time.time() - start_time
 
-        if total_duration > self._director.default_timeout:
+        if total_duration > timeout:
             raise exceptions.ElementCoveredByAnotherElement((
                     "Another element, a '{}' with id '{}' "
                     "and class '{}' is covering yours '{}'."

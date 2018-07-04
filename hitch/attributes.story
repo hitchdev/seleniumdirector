@@ -1,5 +1,5 @@
 With xpath or attributes:
-  based on: login page
+  based on: default
   given:
     selectors.yml: |
       login:

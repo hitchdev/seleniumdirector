@@ -1,11 +1,10 @@
 Overlay - should_be_on_top:
+  based on: default
   description: |
     This story demonstrates .should_be_on_top() which waits not
     only for an element to be present on the page (without display:none set),
     it will wait until no other element covers it.
   given:
-    python version: 3.5.0
-    selenium version: 3.11.0
     javascript: |
       $(document).ready(function() {
         displayOverlay("Loading...")
@@ -60,10 +59,9 @@ Overlay - should_be_on_top:
       steps:
       - Run:
           code: |
-            director.default_timeout = 0.5
             director.visit("http://localhost:8000")
             director.wait_for_page("dashboard")
-            director.the("message").should_be_on_top()
+            director.the("message").should_be_on_top(after=0.5)
             director.the("message").click()
           raises:
             type: seleniumdirector.exceptions.ElementCoveredByAnotherElement
