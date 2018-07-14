@@ -1,1 +1,2 @@
+- should_disappear_from_page
 - should_be_* with explicit after=4.
