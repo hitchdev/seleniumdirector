@@ -69,6 +69,28 @@ class WebElement(object):
     def click(self):
         self.element.click()
 
+    def should_disappear(self, after=None):
+        """
+        Ensure element is no longer on the page or display:none is set.
+
+        Specify 'after' to wait for a specific duration in seconds. By default
+        it waits for default_timeout seconds.
+        """
+        timeout = after if after is not None else self._director.default_timeout
+        try:
+            WebDriverWait(
+                self._director.driver, timeout
+            ).until_not(
+                expected_conditions.presence_of_element_located(self._selector)
+            )
+        except seleniumexceptions.TimeoutException:
+            raise exceptions.ElementStillOnPage(
+                "{} still on page after {} seconds.".format(
+                    self.name,
+                    timeout,
+                )
+            )
+
     def should_contain(self, text):
         timeout = self._director.default_timeout
         start_time = time.time()

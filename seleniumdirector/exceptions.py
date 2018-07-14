@@ -20,3 +20,7 @@ class ElementDidNotAppear(SeleniumDirectorException):
 
 class ElementDidNotContain(SeleniumDirectorException):
     pass
+
+
+class ElementStillOnPage(SeleniumDirectorException):
+    pass
