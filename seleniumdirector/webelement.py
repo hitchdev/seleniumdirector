@@ -126,6 +126,9 @@ class WebElement(object):
         * Not set to be invisible (i.e. display:none isn't set).
         * Not be covered by another element (e.g. an overlay).
 
+        The element's midpoint is checked to see if it is covered. It does not matter
+        if corners are covered.
+
         Specify 'after' to wait for a specific duration in seconds. By default
         it waits for default_timeout seconds.
         """
@@ -138,9 +141,11 @@ class WebElement(object):
 
         for i in range(0, int(continue_for_how_long * 10.0)):
             element_coordinates = self.element.location
+            element_size = self.element.size
             element_at_coordinates = self._director.driver.execute_script(
                 "return document.elementFromPoint({}, {})".format(
-                    element_coordinates["x"] + 1, element_coordinates["y"] + 1
+                    element_coordinates["x"] + element_size['width'] / 2,
+                    element_coordinates["y"] + element_size['height'] / 2,
                 )
             )
             if self.element.id == element_at_coordinates.id:
