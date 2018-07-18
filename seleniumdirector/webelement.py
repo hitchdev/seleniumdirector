@@ -69,9 +69,10 @@ class WebElement(object):
     def click(self):
         self.element.click()
 
-    def should_disappear(self, after=None):
+    def should_not_be_on_page(self, after=None):
         """
-        Ensure element is no longer on the page or display:none is set.
+        Ensure element is either not present or that display:none is set after
+        a specified duration.
 
         Specify 'after' to wait for a specific duration in seconds. By default
         it waits for default_timeout seconds.

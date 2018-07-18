@@ -1,4 +1,4 @@
-Element should not be present:
+Element should not be on page:
   based on: default
   given:
     selectors.yml: |
@@ -27,7 +27,7 @@ Element should not be present:
       - Run: |
           selector.visit("http://localhost:8000")
           selector.wait_for_page("dashboard")
-          selector.the("overlay").should_disappear(after=2)
+          selector.the("overlay").should_not_be_on_page(after=2)
           selector.the("dashboard message").click()
 
     still on page:
@@ -36,7 +36,7 @@ Element should not be present:
           code: |
             selector.visit("http://localhost:8000")
             selector.wait_for_page("dashboard")
-            selector.the("overlay").should_disappear(after=0.5)
+            selector.the("overlay").should_not_be_on_page(after=0.5)
             selector.the("dashboard message").click()
           raises:
             type: seleniumdirector.exceptions.ElementStillOnPage

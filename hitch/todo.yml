@@ -1,2 +1,2 @@
-- should_disappear_from_page
-- should_be_* with explicit after=4.
+- should_be_* with after=4.
+- element not in selectors --- exception should list the elements that are in selectors.
