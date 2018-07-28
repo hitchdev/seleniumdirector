@@ -92,10 +92,10 @@ class WebElement(object):
                 )
             )
 
-    def should_contain(self, text):
-        timeout = self._director.default_timeout
+    def should_contain(self, text, after=None):
+        timeout = after if after is not None else self._director.default_timeout
         start_time = time.time()
-        self.should_be_on_page()
+        self.should_be_on_page(after=after)
         continue_for_how_long = timeout - (time.time() - start_time)
         try:
             WebDriverWait(self._director.driver, continue_for_how_long).until(

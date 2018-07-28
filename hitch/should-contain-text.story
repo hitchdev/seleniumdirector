@@ -27,7 +27,7 @@ Should contain text:
           code: |
             selector.visit("http://localhost:8000")
             selector.wait_for_page("login")
-            selector.the("login button").should_contain("logout")
+            selector.the("login button").should_contain("logout", after=5)
           raises:
             type: seleniumdirector.exceptions.ElementDidNotContain
             message: |-
