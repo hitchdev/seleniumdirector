@@ -1,2 +1,5 @@
 - should_be_* with after=4.
 - element not in selectors --- exception should list the elements that are in selectors.
+- http://uitestingplayground.com/ and https://the-internet.herokuapp.com/ -- try out and fix
+- run two side by side browsers
+- override with code

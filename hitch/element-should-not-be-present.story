@@ -7,6 +7,7 @@ Element should not be on page:
         elements:
           overlay: id=overlay
           dashboard message: id=id_dashboard_message
+          nonexistent element: id=nonexistent_element
 
     javascript: |
       $(document).ready(function() {
@@ -22,12 +23,13 @@ Element should not be on page:
         </div>
 
   variations:
-    successful:
+    successful disappearance or never on page:
       steps:
       - Run: |
           selector.visit("http://localhost:8000")
           selector.wait_for_page("dashboard")
           selector.the("overlay").should_not_be_on_page(after=2)
+          selector.the("nonexistent element").should_not_be_on_page(after=2)
           selector.the("dashboard message").click()
 
     still on page:
