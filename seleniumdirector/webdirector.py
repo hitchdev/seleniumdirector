@@ -33,7 +33,7 @@ class WebDirector(object):
                     }
                 ),
             ),
-        ).data
+        )
         self._current_page = None
         self.default_timeout = default_timeout
         self._use_faketime = False
@@ -66,16 +66,16 @@ class WebDirector(object):
         self.driver.get(url)
 
     def wait_for_page(self, page_name):
-        appears_when = self._selectors[page_name]["appears when"]
+        appears_when = self._selectors[page_name]["appears when"].data
         self._select(appears_when, page_name).should_be_on_page()
         self._current_page = page_name
 
     def _select(self, name, page):
-        if name not in self._selectors[page]["elements"]:
+        if name not in self._selectors[page]["elements"].data:
             raise exceptions.NotFoundInSelectors(
                 "'{}' not found in selectors file for page '{}'.".format(name, page)
             )
-        element_yaml = self._selectors[page]["elements"][name]
+        element_yaml = self._selectors[page]["elements"][name].data
         if isinstance(element_yaml, dict):
             if "class" in element_yaml.keys():
                 xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
