@@ -39,6 +39,7 @@ def text_is_selector(element_yaml):
             xpath,
             element_yaml['which'] if element_yaml['which'] != "last" else "last()"
         )
+    return xpath
 
 
 def text_contains_selector(element_yaml):
@@ -132,9 +133,11 @@ class WebDirector(object):
             if "attribute" in element_yaml.keys():
                 return WebElement(self, name, page, DEFAULT_SELECTORS['attribute'](element_yaml))
             if "text is" in element_yaml.keys():
-                return WebElement(self, name, page, DEFAULT_SELECTORS['text is'](element_yaml))
+                return WebElement(self, name, page, DEFAULT_SELECTORS['text_is'](element_yaml))
             if "text contains" in element_yaml.keys():
-                return WebElement(self, name, page, DEFAULT_SELECTORS['text contains'](element_yaml))
+                return WebElement(
+                    self, name, page, DEFAULT_SELECTORS['text_contains'](element_yaml)
+                )
             if "xpath" in element_yaml.keys():
                 return WebElement(self, name, page, element_yaml["xpath"])
             else:
