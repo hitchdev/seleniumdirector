@@ -10,56 +10,26 @@ THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
 def class_selector(element_yaml):
-    xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
+    return"//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
         element_yaml['class']
     )
-    if "which" in element_yaml.keys():
-        xpath = "({})[{}]".format(
-            xpath,
-            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-        )
-    return xpath
 
 
 def attribute_selector(element_yaml):
     key, value = element_yaml["attribute"].split("=")
-    xpath = "//*[@{0}='{1}']".format(key, value)
-    if "which" in element_yaml.keys():
-        xpath = "({})[{}]".format(
-            xpath,
-            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-        )
-    return xpath
+    return "//*[@{0}='{1}']".format(key, value)
 
 
 def text_is_selector(element_yaml):
-    xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
-    if "which" in element_yaml.keys():
-        xpath = "({})[{}]".format(
-            xpath,
-            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-        )
-    return xpath
+    return '//*[text()="{}"]'.format(element_yaml["text is"])
 
 
 def text_contains_selector(element_yaml):
-    xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
-    if "which" in element_yaml.keys():
-        xpath = "({})[{}]".format(
-            xpath,
-            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-        )
-    return xpath
+    return '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
 
 
 def xpath_selector(element_yaml):
-    xpath = element_yaml['xpath']
-    if "which" in element_yaml.keys():
-        xpath = "({})[{}]".format(
-            xpath,
-            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-        )
-    return xpath
+    return element_yaml['xpath']
 
 
 DEFAULT_SELECTORS = {
@@ -141,9 +111,13 @@ class WebDirector(object):
         if isinstance(element_yaml, dict):
             for selector_type in DEFAULT_SELECTORS.keys():
                 if selector_type in element_yaml.keys():
-                    return WebElement(
-                        self, name, page, DEFAULT_SELECTORS[selector_type](element_yaml)
-                    )
+                    xpath = DEFAULT_SELECTORS[selector_type](element_yaml)
+                    if "which" in element_yaml.keys():
+                        xpath = "({})[{}]".format(
+                            xpath,
+                            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                        )
+                    return WebElement(self, name, page, xpath)
             raise Exception("Selector not found")
         else:
             seltype, ident = element_yaml.split("=")
