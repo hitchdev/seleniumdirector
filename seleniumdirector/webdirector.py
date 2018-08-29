@@ -52,11 +52,22 @@ def text_contains_selector(element_yaml):
     return xpath
 
 
+def xpath_selector(element_yaml):
+    xpath = element_yaml['xpath']
+    if "which" in element_yaml.keys():
+        xpath = "({})[{}]".format(
+            xpath,
+            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+        )
+    return xpath
+
+
 DEFAULT_SELECTORS = {
     "class": class_selector,
     "attribute": attribute_selector,
-    "text_is": text_is_selector,
-    "text_contains": text_contains_selector,
+    "text is": text_is_selector,
+    "text contains": text_contains_selector,
+    "xpath": xpath_selector,
 }
 
 
@@ -128,20 +139,12 @@ class WebDirector(object):
             )
         element_yaml = self._selectors[page]["elements"][name].data
         if isinstance(element_yaml, dict):
-            if "class" in element_yaml.keys():
-                return WebElement(self, name, page, DEFAULT_SELECTORS['class'](element_yaml))
-            if "attribute" in element_yaml.keys():
-                return WebElement(self, name, page, DEFAULT_SELECTORS['attribute'](element_yaml))
-            if "text is" in element_yaml.keys():
-                return WebElement(self, name, page, DEFAULT_SELECTORS['text_is'](element_yaml))
-            if "text contains" in element_yaml.keys():
-                return WebElement(
-                    self, name, page, DEFAULT_SELECTORS['text_contains'](element_yaml)
-                )
-            if "xpath" in element_yaml.keys():
-                return WebElement(self, name, page, element_yaml["xpath"])
-            else:
-                raise Exception("Bad identifier found")
+            for selector_type in DEFAULT_SELECTORS.keys():
+                if selector_type in element_yaml.keys():
+                    return WebElement(
+                        self, name, page, DEFAULT_SELECTORS[selector_type](element_yaml)
+                    )
+            raise Exception("Selector not found")
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":
