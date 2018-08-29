@@ -9,6 +9,56 @@ import json
 THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
+def class_selector(element_yaml):
+    xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
+        element_yaml['class']
+    )
+    if "which" in element_yaml.keys():
+        xpath = "({})[{}]".format(
+            xpath,
+            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+        )
+    return xpath
+
+
+def attribute_selector(element_yaml):
+    key, value = element_yaml["attribute"].split("=")
+    xpath = "//*[@{0}='{1}']".format(key, value)
+    if "which" in element_yaml.keys():
+        xpath = "({})[{}]".format(
+            xpath,
+            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+        )
+    return xpath
+
+
+def text_is_selector(element_yaml):
+    xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
+    if "which" in element_yaml.keys():
+        xpath = "({})[{}]".format(
+            xpath,
+            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+        )
+
+
+def text_contains_selector(element_yaml):
+    xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
+    if "which" in element_yaml.keys():
+        xpath = "({})[{}]".format(
+            xpath,
+            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+        )
+    return xpath
+
+
+DEFAULT_SELECTORS = {
+    "class": class_selector,
+    "attribute": attribute_selector,
+    "text_is": text_is_selector,
+    "text_contains": text_contains_selector,
+}
+
+
 class WebDirector(object):
     def __init__(self, driver, selector_file, fake_time=None, default_timeout=5):
         self.driver = driver
@@ -78,40 +128,13 @@ class WebDirector(object):
         element_yaml = self._selectors[page]["elements"][name].data
         if isinstance(element_yaml, dict):
             if "class" in element_yaml.keys():
-                xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
-                    element_yaml['class']
-                )
-                if "which" in element_yaml.keys():
-                    xpath = "({})[{}]".format(
-                        xpath,
-                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-                    )
-                return WebElement(self, name, page, xpath)
+                return WebElement(self, name, page, DEFAULT_SELECTORS['class'](element_yaml))
             if "attribute" in element_yaml.keys():
-                key, value = element_yaml["attribute"].split("=")
-                xpath = "//*[@{0}='{1}']".format(key, value)
-                if "which" in element_yaml.keys():
-                    xpath = "({})[{}]".format(
-                        xpath,
-                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-                    )
-                return WebElement(self, name, page, xpath)
+                return WebElement(self, name, page, DEFAULT_SELECTORS['attribute'](element_yaml))
             if "text is" in element_yaml.keys():
-                xpath = '//*[text()="{}"]'.format(element_yaml["text is"])
-                if "which" in element_yaml.keys():
-                    xpath = "({})[{}]".format(
-                        xpath,
-                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-                    )
-                return WebElement(self, name, page, xpath)
+                return WebElement(self, name, page, DEFAULT_SELECTORS['text is'](element_yaml))
             if "text contains" in element_yaml.keys():
-                xpath = '//*[contains(text(), "{}")]'.format(element_yaml["text contains"])
-                if "which" in element_yaml.keys():
-                    xpath = "({})[{}]".format(
-                        xpath,
-                        element_yaml['which'] if element_yaml['which'] != "last" else "last()"
-                    )
-                return WebElement(self, name, page, xpath)
+                return WebElement(self, name, page, DEFAULT_SELECTORS['text contains'](element_yaml))
             if "xpath" in element_yaml.keys():
                 return WebElement(self, name, page, element_yaml["xpath"])
             else:
