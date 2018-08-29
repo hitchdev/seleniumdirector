@@ -10,7 +10,7 @@ THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
 def class_selector(element_yaml):
-    return"//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
+    return "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
         element_yaml['class']
     )
 
