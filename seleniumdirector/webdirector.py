@@ -9,9 +9,13 @@ import json
 THIS_DIRECTORY = Path(__file__).realpath().dirname()
 
 
+def id_selector(element_yaml):
+    return "//*[@id='{}']".format(element_yaml["id"])
+
+
 def class_selector(element_yaml):
     return "//*[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]".format(
-        element_yaml['class']
+        element_yaml["class"]
     )
 
 
@@ -29,10 +33,11 @@ def text_contains_selector(element_yaml):
 
 
 def xpath_selector(element_yaml):
-    return element_yaml['xpath']
+    return element_yaml["xpath"]
 
 
 DEFAULT_SELECTORS = {
+    "id": id_selector,
     "class": class_selector,
     "attribute": attribute_selector,
     "text is": text_is_selector,
@@ -53,14 +58,19 @@ class WebDirector(object):
                         "appears when": Str(),
                         "elements": MapPattern(
                             Str(),
-                            Str() | Map({
-                                Optional("which"): Enum(["last"]) | Int(),
-                                Optional("class"): Str(),
-                                Optional("attribute"): Str(),
-                                Optional("xpath"): Str(),
-                                Optional("text contains"): Str(),
-                                Optional("text is"): Str(),
-                            })
+                            Str()
+                            | Map(
+                                {
+                                    Optional("in iframe"): Str(),
+                                    Optional("which"): Enum(["last"]) | Int(),
+                                    Optional("id"): Str(),
+                                    Optional("class"): Str(),
+                                    Optional("attribute"): Str(),
+                                    Optional("xpath"): Str(),
+                                    Optional("text contains"): Str(),
+                                    Optional("text is"): Str(),
+                                }
+                            ),
                         ),
                     }
                 ),
@@ -111,24 +121,39 @@ class WebDirector(object):
         if isinstance(element_yaml, dict):
             for selector_type in DEFAULT_SELECTORS.keys():
                 if selector_type in element_yaml.keys():
+                    iframe_container = (
+                        self._select(element_yaml["in iframe"], page)
+                        if "in iframe" in element_yaml.keys()
+                        else None
+                    )
+
                     xpath = DEFAULT_SELECTORS[selector_type](element_yaml)
                     if "which" in element_yaml.keys():
                         xpath = "({})[{}]".format(
                             xpath,
-                            element_yaml['which'] if element_yaml['which'] != "last" else "last()"
+                            element_yaml["which"]
+                            if element_yaml["which"] != "last"
+                            else "last()",
                         )
-                    return WebElement(self, name, page, xpath)
+                    return WebElement(
+                        self, name, page, xpath, iframe_container=iframe_container
+                    )
             raise Exception("Selector not found")
         else:
             seltype, ident = element_yaml.split("=")
             if seltype == "id":
                 return WebElement(self, name, page, "//*[@id='{0}']".format(ident))
             elif seltype == "class":
-                return WebElement(self, name, page, (
-                    "//*[contains("
-                    "concat(' ', normalize-space(@class), ' '), "
-                    "' {} ')]"
-                ).format(ident))
+                return WebElement(
+                    self,
+                    name,
+                    page,
+                    (
+                        "//*[contains("
+                        "concat(' ', normalize-space(@class), ' '), "
+                        "' {} ')]"
+                    ).format(ident),
+                )
             else:
                 raise Exception("seltype {} not recognized".format(ident))
 

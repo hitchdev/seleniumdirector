@@ -411,6 +411,13 @@ def black():
     python_bin.black(DIR.key / "key.py").run()
 
 
+def runserver():
+    """
+    Run web server.
+    """
+    python("-m", "http.server").in_dir(DIR.gen / "state" / "webapp").run()
+
+
 def rerun(version="3.5.0"):
     """
     Rerun last example code block with specified version of python.
