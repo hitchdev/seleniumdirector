@@ -66,4 +66,4 @@ Overlay - should_be_on_top:
           raises:
             type: seleniumdirector.exceptions.ElementCoveredByAnotherElement
             message: |-
-              Another element, a 'td' with id '' and class '' is covering yours '//*[@id='id_dashboard_message']'.
+              Another element, a 'p' with id 'id_dashboard_message' and class '' is covering yours '//*[@id='id_dashboard_message']'.

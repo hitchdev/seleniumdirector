@@ -1,4 +1,4 @@
-from strictyaml import load, MapPattern, Optional, Enum, Str, Map, Int
+from strictyaml import load, MapPattern, Optional, Enum, Str, Map, Int, Any
 from seleniumdirector.webelement import WebElement
 from seleniumdirector import exceptions
 from selenium.webdriver import Chrome
@@ -46,36 +46,115 @@ DEFAULT_SELECTORS = {
 }
 
 
+ELEMENTS_SCHEMA = MapPattern(
+    Str(),
+    Str()
+    | Map(
+        {
+            Optional("in iframe"): Str(),
+            Optional("which"): Enum(["last"]) | Int(),
+            Optional("but parent"): Int(),
+            Optional("subelements"): Any(),
+            # SELECTORS
+            Optional("id"): Str(),
+            Optional("class"): Str(),
+            Optional("attribute"): Str(),
+            Optional("text is"): Str(),
+            Optional("text contains"): Str(),
+            Optional("xpath"): Str(),
+        }
+    ),
+)
+
+
+def revalidate_subelements(elements):
+    for name, options in elements.items():
+        if "subelements" in options:
+            options["subelements"].revalidate(ELEMENTS_SCHEMA)
+            revalidate_subelements(options["subelements"])
+
+
+def parse_yaml(yaml_text):
+    selectors = load(
+        yaml_text,
+        MapPattern(Str(), Map({"appears when": Str(), "elements": ELEMENTS_SCHEMA})),
+    )
+
+    for page, page_properties in selectors.items():
+        revalidate_subelements(page_properties["elements"])
+    return selectors
+
+
+class ElementData(object):
+    def __init__(self, name, page, element_yaml):
+        self._name = name
+        self._page = page
+        self._element_yaml = element_yaml
+
+    @property
+    def names(self):
+        return [name.strip() for name in self._name.split("/")]
+
+    @property
+    def first_yaml(self):
+        return self.yaml_items[0]
+
+    @property
+    def yaml_items(self):
+        def yaml_from(names, element_yaml):
+            if len(names) == 1:
+                return element_yaml[names[0].strip()]
+            else:
+                return yaml_from(
+                    names[1:], element_yaml[names[0].strip()]["subelements"]
+                )
+
+        items = []
+        length = len(self.names)
+
+        for i in range(1, length + 1):
+            try:
+                items.append(
+                    yaml_from(self.names[:i], self._element_yaml["elements"]).data
+                )
+            except KeyError:
+                raise exceptions.NotFoundInSelectors(
+                    "'{}' not found in selectors file for page '{}'.".format(
+                        self._name, self._page
+                    )
+                )
+
+        return items
+
+    @property
+    def xpath(self):
+        full_path = u""
+
+        for yaml_item in self.yaml_items:
+            for selector_type in DEFAULT_SELECTORS.keys():
+                if selector_type in yaml_item.keys():
+                    path = DEFAULT_SELECTORS[selector_type](yaml_item)
+
+                    if "but parent" in yaml_item.keys():
+                        path = "{}{}".format(path, "/.." * yaml_item["but parent"])
+
+                    if "which" in yaml_item.keys():
+                        path = "({})[{}]".format(
+                            path,
+                            yaml_item["which"]
+                            if yaml_item["which"] != "last"
+                            else "last()",
+                        )
+
+                    full_path += path
+
+        return full_path
+
+
 class WebDirector(object):
     def __init__(self, driver, selector_file, fake_time=None, default_timeout=5):
         self.driver = driver
-        self._selectors = load(
-            Path(selector_file).text(),
-            MapPattern(
-                Str(),
-                Map(
-                    {
-                        "appears when": Str(),
-                        "elements": MapPattern(
-                            Str(),
-                            Str()
-                            | Map(
-                                {
-                                    Optional("in iframe"): Str(),
-                                    Optional("which"): Enum(["last"]) | Int(),
-                                    Optional("id"): Str(),
-                                    Optional("class"): Str(),
-                                    Optional("attribute"): Str(),
-                                    Optional("xpath"): Str(),
-                                    Optional("text contains"): Str(),
-                                    Optional("text is"): Str(),
-                                }
-                            ),
-                        ),
-                    }
-                ),
-            ),
-        )
+        self._selectors = parse_yaml(Path(selector_file).text())
         self._current_page = None
         self.default_timeout = default_timeout
         self._use_faketime = False
@@ -113,34 +192,22 @@ class WebDirector(object):
         self._current_page = page_name
 
     def _select(self, name, page):
-        if name not in self._selectors[page]["elements"].data:
-            raise exceptions.NotFoundInSelectors(
-                "'{}' not found in selectors file for page '{}'.".format(name, page)
-            )
-        element_yaml = self._selectors[page]["elements"][name].data
-        if isinstance(element_yaml, dict):
-            for selector_type in DEFAULT_SELECTORS.keys():
-                if selector_type in element_yaml.keys():
-                    iframe_container = (
-                        self._select(element_yaml["in iframe"], page)
-                        if "in iframe" in element_yaml.keys()
-                        else None
-                    )
+        element_data = ElementData(name, page, self._selectors[page])
 
-                    xpath = DEFAULT_SELECTORS[selector_type](element_yaml)
-                    if "which" in element_yaml.keys():
-                        xpath = "({})[{}]".format(
-                            xpath,
-                            element_yaml["which"]
-                            if element_yaml["which"] != "last"
-                            else "last()",
-                        )
-                    return WebElement(
-                        self, name, page, xpath, iframe_container=iframe_container
-                    )
-            raise Exception("Selector not found")
+        if isinstance(element_data.first_yaml, dict):
+            return WebElement(
+                self,
+                name,
+                page,
+                element_data.xpath,
+                iframe_container=(
+                    self._select(element_data.first_yaml["in iframe"], page)
+                    if "in iframe" in element_data.first_yaml.keys()
+                    else None
+                ),
+            )
         else:
-            seltype, ident = element_yaml.split("=")
+            seltype, ident = element_data.first_yaml.split("=")
             if seltype == "id":
                 return WebElement(self, name, page, "//*[@id='{0}']".format(ident))
             elif seltype == "class":
