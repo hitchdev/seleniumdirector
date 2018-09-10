@@ -110,9 +110,8 @@ class ElementData(object):
                 )
 
         items = []
-        length = len(self.names)
 
-        for i in range(1, length + 1):
+        for i in range(1, len(self.names) + 1):
             try:
                 items.append(
                     yaml_from(self.names[:i], self._element_yaml["elements"]).data

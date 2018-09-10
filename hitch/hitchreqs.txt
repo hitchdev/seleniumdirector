@@ -16,7 +16,7 @@ hitchbuildpy==0.3.4
 hitchdoc==0.1.1
 hitchrun==0.2.9
 hitchrunpy==0.6.0
-hitchstory==0.8.0
+hitchstory==0.11.1
 icommandlib==0.4.1
 idna==2.5                 # via requests
 ipykernel==4.6.1          # via jupyter-console
@@ -55,7 +55,7 @@ ruamel.yaml==0.15.34      # via strictyaml
 simex==0.3.5
 simplegeneric==0.8.1      # via ipython
 six==1.10.0               # via pip-tools, prompt-toolkit, python-dateutil, traitlets
-strictyaml==0.11.0
+strictyaml==0.11.10
 templex==0.1.1
 toml==0.9.4               # via black
 tornado==4.5.1            # via ipykernel

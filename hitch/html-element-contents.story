@@ -1,6 +1,6 @@
 Selectors using HTML contents:
   based on: default
-  description: |
+  about: |
     This story demonstrates using the textual content of
     HTML elements to select them.
     

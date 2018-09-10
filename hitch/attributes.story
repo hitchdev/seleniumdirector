@@ -1,4 +1,11 @@
-With xpath or attributes:
+With HTML attributes:
+  about: |
+    This example demonstrates how to use HTML attributes to select and use
+    HTML elements by using 'attribute: attrib-name=attrib-value'.
+    
+    If there is more than one element matching that attribute, the element
+    to use can be specified using 'which: [ number ]' or which: last.
+  docs: attributes
   based on: default
   given:
     selectors.yml: |

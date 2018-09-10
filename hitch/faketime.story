@@ -1,5 +1,5 @@
 Fake time:
-  description: |
+  about: |
     This story demonstrates mocking the browser date and time
     so that any javascript code or javascript libraries loaded
     on a page use the time which is fed to the webselector object

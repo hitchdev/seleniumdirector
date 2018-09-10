@@ -1,6 +1,6 @@
 Overlay - should_be_on_top:
   based on: default
-  description: |
+  about: |
     This story demonstrates .should_be_on_top() which waits not
     only for an element to be present on the page (without display:none set),
     it will wait until no other element covers it.

@@ -1,9 +1,10 @@
-from hitchstory import StoryCollection, StorySchema, BaseEngine, HitchStoryException
-from hitchstory import validate, expected_exception
+from hitchstory import StoryCollection, BaseEngine, HitchStoryException
+from hitchstory import validate, no_stacktrace_for
+from hitchstory import GivenDefinition, GivenProperty, InfoDefinition, InfoProperty
 from hitchrun import expected
 from icommandlib import ICommand, ICommandError
 from commandlib import Command, CommandError, python, python_bin
-from strictyaml import Str, Map, MapPattern, Bool, Optional, load
+from strictyaml import Str, Map, MapPattern, Bool, Enum, Optional, load
 from pathquery import pathquery
 from hitchrun import hitch_maintenance
 from hitchrun import DIR
@@ -44,19 +45,21 @@ def project_build(paths, python_version, selenium_version=None):
 
 class Engine(BaseEngine):
     """Python engine for running tests."""
-
-    schema = StorySchema(
-        given={
-            Optional("python version"): Str(),
-            Optional("selenium version"): Str(),
-            Optional("website"): MapPattern(Str(), Str()),
-            Optional("selectors.yml"): Str(),
-            Optional("javascript"): Str(),
-            Optional("setup"): Str(),
-            Optional("code"): Str(),
-        },
-        info={Optional("docs"): Str()},
+    given_definition = GivenDefinition(
+        python_version=GivenProperty(Str()),
+        selenium_version=GivenProperty(Str()),
+        website=GivenProperty(MapPattern(Str(), Str())),
+        selectors_yml=GivenProperty(Str()),
+        javascript=GivenProperty(Str()),
+        setup=GivenProperty(Str()),
+        code=GivenProperty(Str()),
     )
+
+    info_definition = InfoDefinition(
+        status=InfoProperty(schema=Enum(["experimental", "stable"])),
+        docs=InfoProperty(schema=Str()),
+    )
+
 
     def __init__(self, keypath, settings):
         self.path = keypath
@@ -103,8 +106,8 @@ class Engine(BaseEngine):
             .with_long_strings()
         )
 
-    @expected_exception(NonMatching)
-    @expected_exception(HitchRunPyException)
+    @no_stacktrace_for(NonMatching)
+    @no_stacktrace_for(HitchRunPyException)
     @validate(
         code=Str(),
         will_output=Map({"in python 2": Str(), "in python 3": Str()}) | Str(),
@@ -354,16 +357,17 @@ def docgen():
     template = (
         dirtemplate.DirTemplate("docs", DIR.project / "docs", DIR.gen)
         .with_files(
-            story_md={
+            template_story_jinja2={
                 "using/alpha/{0}.md".format(story.info["docs"]): {"story": story}
                 for story in _storybook({}).ordered_by_name()
-                if story.info.get("docs") is not None
+                if "docs" in story.info
             }
         )
         .with_vars(
+            include_title=True,
             readme=False,
             quickstart=_storybook({})
-            .in_filename(DIR.key / "quickstart.story")
+            .in_filename(DIR.key / "attributes.story")
             .non_variations()
             .ordered_by_file(),
         )

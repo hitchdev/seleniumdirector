@@ -1,0 +1,56 @@
+{% if include_title %}
+---
+title: {{ story.name }}
+type: using
+---
+{% if story.info['experimental'] %}{% raw %}
+{{< warning title="Experimental" >}}
+This feature is in alpha. The API may change on a minor version increment.
+{{< /warning >}}
+{% endraw %}{% endif %}
+{% endif %}
+
+{{ story.about }}
+
+{% if 'website' in story.given %}
+HTML:
+
+{% for filename, content in story.given['website'].items() %}
+
+{{ filename }}:
+
+```html
+{{ content }}
+```
+{% endfor %}
+{% endif %}
+
+selectors.yml:
+
+```yaml
+{{ story.given['selectors_yml'] }}
+```
+
+{% if story.variations %}
+
+{% for variation in story.variations %}
+{{ variation.child_name }}:
+
+{% for step in variation.steps %}
+{% with step = step %}{% include "step.jinja2" %}{% endwith %}
+{% endfor %}
+{% endfor %}
+
+{% else %}
+
+{% for step in story.steps %}
+{% with step = step %}{% include "step.jinja2" %}{% endwith %}
+{% endfor %}
+
+{% endif %}
+
+{% if include_title %}
+{% raw %}{{< note title="Executable specification" >}}{% endraw %}
+Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/{{ story.filename.basename() }}">{{ story.filename.basename() }}</a>.
+{% raw %}{{< /note >}}{% endraw %}
+{% endif %}
