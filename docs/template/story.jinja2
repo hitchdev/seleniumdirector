@@ -25,10 +25,24 @@ HTML:
 {% endfor %}
 {% endif %}
 
+{% if 'javascript' in story.given %}
+Javascript embedded in above HTML:
+
+```javascript
+{{ content }}
+```
+{% endif %}
+
 selectors.yml:
 
 ```yaml
 {{ story.given['selectors_yml'] }}
+```
+
+set up:
+
+```yaml
+{{ story.given['setup'] }}
 ```
 
 {% if story.variations %}

@@ -1,4 +1,15 @@
 Selectors with HTML IDs:
+  docs: html-ids
+  about: |
+    This example demonstrates how to look for of HTML IDs to
+    select and use HTML elements by using 'id=class_name' or 'id: class_name'.
+
+    This is often the ideal kind of selector to use if an element has an ID, since IDs tend to be
+    relatively unchanging and the likelihood of accidentally selecting the wrong element is low.
+
+    If there is more than one element matching a ID (shouldn't be common since that's a 
+    violation of HTML semantics, but it still happens!), the element to use can be
+    specified using 'which: [ number ]' or which: last.
   based on: default
   given:
     selectors.yml: |
@@ -12,8 +23,10 @@ Selectors with HTML IDs:
       dashboard:
         appears when: dashboard identifier
         elements:
-          dashboard identifier: id=id_this_is_a_dashboard_element
-          message: id=id_dashboard_message
+          dashboard identifier:
+            id: id_this_is_a_dashboard_element
+          message:
+            id: id_dashboard_message
 
     website:
       index.html: |

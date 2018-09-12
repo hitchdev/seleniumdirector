@@ -1,4 +1,12 @@
 Sub-elements:
+  docs: subelements
+  about: |
+    This example demonstrates both how to reference subelements (using subelements:)
+    as well as how to select elements by selector and asking for the parent (using but parent:).
+    
+    It also shows how to grab these subelements - i.e. parent name / child name.
+    
+    This is an useful feature when grabbing things in groups or tables.
   based on: default
   given:
     selectors.yml: |

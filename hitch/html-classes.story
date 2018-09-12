@@ -1,4 +1,12 @@
 Selectors with HTML classes:
+  docs: html-classes
+  about: |
+    This example demonstrates how to look for the presence of HTML classes to
+    select and use HTML elements by using 'class=class_name' or 'class: class_name'.
+
+    If there is more than one element matching a class (common, since that's how classes
+    are supposed to be used), the element to use can be specified using 'which: [ number ]'
+    or which: last.
   based on: default
   given:
     selectors.yml: |
@@ -12,9 +20,11 @@ Selectors with HTML classes:
       dashboard:
         appears when: dashboard identifier
         elements:
-          dashboard identifier: class=class_this_is_a_dashboard_element
-          message: class=class_dashboard_element
-  
+          dashboard identifier:
+            class: class_this_is_a_dashboard_element
+          message:
+            class: class_dashboard_element
+
     website:
       index.html: |
         <div class="class_this_is_a_login_page form-login">

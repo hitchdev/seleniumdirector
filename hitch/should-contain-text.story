@@ -1,4 +1,9 @@
 Should contain text:
+  about: |
+    This example demonstrates .should_contain("text") which first waits
+    for the specified element to appear and then waits for it to contain
+    part or all of the text specified.
+  docs: should-contain-text
   based on: default
   given:
     selectors.yml: |
@@ -21,6 +26,13 @@ Should contain text:
         </div>
 
   variations:
+    successful:
+      steps:
+      - Run: |
+          selector.visit("http://localhost:8000")
+          selector.wait_for_page("login")
+          selector.the("login button").should_contain("log", after=5)
+
     timeout on element containing text:
       steps:
       - Run:

@@ -1,4 +1,9 @@
-Selector inside iframe:
+Selector for element inside iframe:
+  docs: iframe
+  about: |
+    If an element you are trying to use is inside an iframe,
+    use "in iframe" in the list of elements to refer to an selector
+    name that uniquely identifies the iframe.
   based on: default
   given:
     selectors.yml: |

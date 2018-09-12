@@ -1,9 +1,14 @@
 Overlay - should_be_on_top:
+  docs: element-should-be-on-top
   based on: default
   about: |
-    This story demonstrates .should_be_on_top() which waits not
+    This example demonstrates .should_be_on_top() which waits not
     only for an element to be present on the page (without display:none set),
     it will wait until no other element covers it.
+    
+    should_be_on_top checks the dead center of the element to see
+    if it is covered. If the middle is covered and the corners are not then
+    it will still think that the element is covered.
   given:
     javascript: |
       $(document).ready(function() {

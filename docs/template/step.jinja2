@@ -16,6 +16,8 @@ Will output:
 ```
 {% endif %}
 {% if 'raises' in step %}
+Raises:
+
 ```python
 {% if 'in python 3' in step['raises']['type'] -%}
 {{ step['raises']['type']['in python 3'] }}:

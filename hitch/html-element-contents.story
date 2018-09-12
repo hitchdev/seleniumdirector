@@ -1,11 +1,15 @@
 Selectors using HTML contents:
+  docs: html-element-contents
   based on: default
   about: |
     This story demonstrates using the textual content of
     HTML elements to select them.
     
     Either "text is" to match the text exactly or "text contains"
-    to match some element of the text.
+    to match partial text.
+    
+    Use 'which' to match a specific element when more than one
+    matches.
   given:
     selectors.yml: |
       login:

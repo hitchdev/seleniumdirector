@@ -1,4 +1,15 @@
 Element should not be on page:
+  docs: disappearing-element
+  about: |
+    The following example shows a 'loading overlay' element which must disappear
+    before the page can be interacted with.
+    
+    Using .should_not_be_on_page(after=seconds) selenium director can wait
+    for the absence of the element and, if it is still there after a timeout,
+    raise an exception.
+    
+    This is also useful for writing stories to invoke bugs that accidentally
+    display elements that shouldn't be there.
   based on: default
   given:
     selectors.yml: |
@@ -32,14 +43,13 @@ Element should not be on page:
           selector.the("nonexistent element").should_not_be_on_page(after=2)
           selector.the("dashboard message").click()
 
-    still on page:
+    if still on page after timeout raise exception:
       steps:
       - Run:
           code: |
             selector.visit("http://localhost:8000")
             selector.wait_for_page("dashboard")
             selector.the("overlay").should_not_be_on_page(after=0.5)
-            selector.the("dashboard message").click()
           raises:
             type: seleniumdirector.exceptions.ElementStillOnPage
             message: overlay still on page after 0.5 seconds.
