@@ -1,5 +1,5 @@
 ---
-title: Why not use the Capybara?
+title: Why not use Capybara?
 ---
 
 

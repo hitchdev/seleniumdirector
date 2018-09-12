@@ -2,15 +2,19 @@ SeleniumDirector
 ================
 
 SeleniumDirector is a python 3 library that makes it straightforward to write easily maintainable 
-python code to interact with websites in a non-brittle way using selenium.
+python code to interact with websites in a non-brittle way using the screenplay pattern with
+selenium.
 
-Seleniumdirector reads YAML "selector" files which associate readable labels with selectors - e.g.
-class name selectors, id selectors, attribute selectors, etc. It requires writing a lot less python
-code than typical "page object pattern" approaches and relies largely upon configuration.
+Seleniumdirector reads YAML "selector" files which associate readable labels with complex selectors
+- i.e. class name selectors, id selectors, attribute selectors, text and xpath.
+
+It requires writing a lot less python code than typical "page object pattern"
+and relies largely upon configuration.
 
 SeleniumDirector was built to be used with [HitchStory](https://hitchdev.com/hitchstory) as a means
-of writing straightforward to maintain integration/browser tests, but it can also be used to direct other forms
-of automated website interaction.
+of writing straightforward to maintain integration/browser tests, but it completely agnostic about
+where it is used. It can be used in py.test, nose or unittest or it could be used to direct other forms
+of automated website interaction - e.g. as a scraper.
 
 
 
