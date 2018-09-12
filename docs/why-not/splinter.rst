@@ -9,3 +9,6 @@ to abstract away selector logic in to a configuration file to clean up the code.
 
 Currently there are certain convenient features of splinter which seleniumdirector
 can't do, some of which will be added to future versions.
+
+Unlike splinter, seleniumdirector expects you to set up the selenium webdriver
+object yourself.
