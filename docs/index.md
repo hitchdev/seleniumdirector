@@ -1,5 +1,15 @@
+{% if readme -%}
 SeleniumDirector
 ================
+{%- else -%}
+
+---
+title: SeleniumDirector
+---
+
+{% raw %}{{< github-stars user="hitchdev" project="seleniumdirector" >}}{% endraw %}
+{% endif %}
+
 
 SeleniumDirector is a python 3 library that makes it straightforward to write easily maintainable 
 python code to interact with websites in a non-brittle way using the screenplay pattern with
@@ -8,8 +18,8 @@ selenium.
 Seleniumdirector reads YAML "selector" files which associate readable labels with complex selectors
 - i.e. class name selectors, id selectors, attribute selectors, text and xpath.
 
-It requires writing a lot less python code than typical "page object pattern"
-and relies largely upon configuration.
+Separating the "element selection" concern from element interaction allows for simpler, more straightforward
+and more readable code.
 
 SeleniumDirector was built to be used with [HitchStory](https://hitchdev.com/hitchstory) as a means
 of writing straightforward to maintain integration/browser tests, but it completely agnostic about
@@ -29,10 +39,9 @@ Example
 Install
 -------
 
-.. code:: bash
-
-  $ pip install seleniumdirector
-
+```bash
+$ pip install seleniumdirector
+```
 
 Using SeleniumDirector
 ----------------------
