@@ -2,14 +2,16 @@
 title: Why not use the page object pattern?
 ---
 
-The [page object pattern](https://www.martinfowler.com/bliki/PageObject.html) is a design pattern for creating a code API abstraction around web pages to simplify their usage in GUI tests. 
+The [page object pattern](https://www.martinfowler.com/bliki/PageObject.html) is a design pattern for creating a code API abstraction around web pages to simplify their usage in GUI tests.
+
+[SeleniumDirector](../../) uses a "selector configuration pattern" where element selectors (id, css, xpath, etc.) are grabbed from a configuration file while the actual actions on HTML elements are not abstracted at all.
 
 The idea of the page object pattern is is to enact a [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) between the code that interacts directly with HTML and the code which interacts with the web application.
 
 While identifying a real problem and proposing a solution that works to solve that problem, it is not the most elegant solution to that problem. There are three major problems with this approach:
 
 
-# It separates the wrong concerns
+## It separates the wrong concerns
 
 Every script script that interacts with a web page performs a series of actions on a set of elements. While the the process to locate those elements is a complex process that benefits from being abstracted, the actions performed on them are, by and large, not. The elements are clicked, they have text entered or one element is dragged on to another, etc.
 
@@ -21,7 +23,7 @@ Whether an element is grabbed by a class selector or an ID selector is of no imp
 
 Separating the concern of "how to grab an element" from "what to do with it" thus makes more sense than separating the concern of "interacting with HTML" from "interacting with the web page".
 
-# It leads to important details about the test's interaction being concealed by vague abstractions
+## It leads to important details about the test's interaction being concealed by vague abstractions
 
 The user might click, enter text, drag and drop, scroll to, etc. Whatever you do with an element *that is part of the specification*.
 
@@ -32,7 +34,7 @@ The page object for "Todo" has a step "create". *How* is the todo created though
 Of course, this is still a tendency and it is entirely possible to create page objects that do not do this. Sadly, this is a tendency that is frequently [actively encouraged](http://aslakhellesoy.com/post/11055981222/the-training-wheels-came-off) as a "best practice".
 
 
-# The page object pattern leads to more code than is necessary
+## The page object pattern leads to more code than is necessary
 
 In the page object pattern every page is a class and every action is a method. If you have an application with a lot of pages and a lot of potential actions that can lead to thousands of extra lines of turing complete code to maintain.
 
