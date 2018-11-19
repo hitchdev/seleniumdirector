@@ -43,6 +43,35 @@ Install
 $ pip install seleniumdirector
 ```
 
+You can also use hitchkey to generate a skeleton project structure along
+with [hitchstory](https://hitchdev.com/hitchstory/).
+
+Either install hitchkey with [pipsi](https://github.com/mitsuhiko/pipsi):
+
+```bash
+pipsi install hitchkey
+```
+
+Or, if you'd prefer, you can safely install with "sudo pip" (deactivate any virtualenvs you're in):
+
+```bash
+sudo pip install hitchkey
+```
+
+Once hitchkey is installed:
+
+```bash
+cd /your/project/directory
+hk --quickstart seleniumdirector
+```
+
+This will create a directory called "hitch" and put three files in it, including one story, which you can play by running:
+
+```bash
+hk bdd logged in
+```
+
+
 Using SeleniumDirector
 ----------------------
 
