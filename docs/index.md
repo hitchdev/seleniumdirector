@@ -1,8 +1,6 @@
 {% if readme -%}
-SeleniumDirector
-================
+# SeleniumDirector
 {%- else -%}
-
 ---
 title: SeleniumDirector
 ---
@@ -28,16 +26,14 @@ of automated website interaction - e.g. as a scraper.
 
 
 
-Example
--------
+## Example
 
 {% for story in quickstart %}
 {% with include_title=False %}{% include 'story.jinja2' %}{% endwith %}
 {% endfor %}
 
 
-Install
--------
+## Install with pip
 
 ```bash
 $ pip install seleniumdirector
@@ -62,7 +58,7 @@ Once hitchkey is installed:
 
 ```bash
 cd /your/project/directory
-hk --quickstart seleniumdirector
+hk --demo seleniumdirector
 ```
 
 This will create a directory called "hitch" and put three files in it, including one story, which you can play by running:
@@ -72,17 +68,14 @@ hk bdd logged in
 ```
 
 
-Using SeleniumDirector
-----------------------
+## Using SeleniumDirector
 
 {% for dirfile in subdir("using/alpha/").is_not_dir() - subdir("using/alpha/").named("index.md") -%}
 - [{{ title(dirfile) }}](using/alpha/{{ dirfile.namebase }})
 {% endfor %}
 
 
-
-Why not X instead?
-------------------
+## Why not X instead?
 
 {% for dirfile in subdir("why-not").is_not_dir() - subdir("why-not").named("index.md") -%} 
 - [{{ title(dirfile) }}](why-not/{{ dirfile.namebase }})
