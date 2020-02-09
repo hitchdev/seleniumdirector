@@ -36,8 +36,7 @@ Overlay - should_be_on_top:
 
       director = seleniumdirector.WebDirector(
           driver,
-          "selectors.yml",
-          fake_time=datetime(2015, 10, 21, 7, 28, 0),
+          "../selectors.yml",
       )
   variations:
     Success:
