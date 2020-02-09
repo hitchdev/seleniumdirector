@@ -418,10 +418,10 @@ def runserver():
     python("-m", "http.server").in_dir(DIR.gen / "state" / "webapp").run()
 
 
-def rerun(version="3.5.0"):
+def rerun(version="3.7.0"):
     """
     Rerun last example code block with specified version of python.
     """
     Command(DIR.gen.joinpath("py{0}".format(version), "bin", "python"))(
-        DIR.gen.joinpath("state", "examplepythoncode.py")
-    ).in_dir(DIR.gen.joinpath("state")).run()
+        DIR.gen.joinpath("state", "working", "examplepythoncode.py")
+    ).in_dir(DIR.gen.joinpath("state", "working")).run()
