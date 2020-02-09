@@ -99,7 +99,6 @@ class Engine(BaseEngine):
 
         self.example_py_code = (
             ExamplePythonCode(self.python, self.path.state)
-            .with_code(self.given.get("code", ""))
             .with_setup_code(self.given.get("setup", ""))
             .with_terminal_size(160, 100)
             .with_long_strings()
@@ -123,6 +122,7 @@ class Engine(BaseEngine):
             code = "{0}\nprint(repr({1}))".format(
                 "\n".join(code.strip().split("\n")[:-1]), code.strip().split("\n")[-1]
             )
+
         to_run = self.example_py_code.with_code(code)
 
         if self.settings.get("cprofile"):

@@ -34,7 +34,7 @@ Fake time:
 
       selector = seleniumdirector.WebDirector(
           driver,
-          "selectors.yml",
+          "../selectors.yml",
           fake_time=datetime(2015, 10, 21, 7, 28, 0),
       )
   steps:
