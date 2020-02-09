@@ -15,7 +15,6 @@ from hitchrunpy import (
     ExpectedExceptionMessageWasDifferent,
 )
 import requests
-from templex import Templex, NonMatching
 from path import Path
 import hitchbuildpy
 import dirtemplate
@@ -106,8 +105,6 @@ class Engine(BaseEngine):
             .with_long_strings()
         )
 
-    @no_stacktrace_for(NonMatching)
-    @no_stacktrace_for(HitchRunPyException)
     @validate(
         code=Str(),
         will_output=Map({"in python 2": Str(), "in python 3": Str()}) | Str(),
