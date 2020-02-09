@@ -83,6 +83,5 @@ hk bdd logged in
 
 
 ## Contributors:
-```bash
+
 - Chaitu Shantharam
-```
