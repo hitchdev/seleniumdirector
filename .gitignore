@@ -8,3 +8,7 @@ __pycache__
 hitch/gen
 hitch/secrets.yml
 tmp/
+.idea/
+pyvenv.cfg
+venv/
+

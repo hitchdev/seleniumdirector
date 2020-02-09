@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from seleniumdirector import exceptions
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 
@@ -217,3 +218,11 @@ class WebElement(object):
                         self._selector[1],
                     )
                 )
+
+    def hover(self):
+        """
+        Forece the mouse on to the desired element to reveal the secondary element
+        :return:
+        """
+        with self.iframe:
+            ActionChains(self._director.driver).move_to_element(self.element).perform()
