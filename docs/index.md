@@ -80,3 +80,9 @@ hk bdd logged in
 {% for dirfile in subdir("why-not").is_not_dir() - subdir("why-not").named("index.md") -%} 
 - [{{ title(dirfile) }}](why-not/{{ dirfile.namebase }})
 {% endfor %}
+
+
+## Contributors:
+```bash
+- Chaitu Shantharam
+```
