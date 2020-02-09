@@ -170,7 +170,6 @@ class Engine(BaseEngine):
                     )
 
             try:
-                result = self.example_py_code.expect_exceptions().run()
                 result.exception_was_raised(exception_type, message)
             except ExpectedExceptionMessageWasDifferent as error:
                 if self.settings.get("rewrite") and not differential:
