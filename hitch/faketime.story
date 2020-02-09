@@ -7,7 +7,7 @@ Fake time:
 
     Note that this feature does not affect window.setTimeouts.
   given:
-    python version: 3.5.0
+    python version: 3.7.0
     selenium version: 3.11.0
     javascript: |
       var now = new Date();

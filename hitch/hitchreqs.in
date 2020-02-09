@@ -1,4 +1,4 @@
-dirtemplate>=0.1.4
+dirtemplate==0.1.4
 strictyaml>=0.11.0
 hitchstory>=0.11.1
 hitchrunpy>=0.6.0
