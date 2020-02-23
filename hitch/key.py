@@ -20,6 +20,7 @@ import hitchbuildpy
 import dirtemplate
 import signal
 
+PROJECT_NAME = "seleniumdirector"
 
 def project_build(paths, python_version, selenium_version=None):
     pylibrary = (
@@ -425,3 +426,14 @@ def rerun(version="3.7.0"):
     Command(DIR.gen.joinpath("py{0}".format(version), "bin", "python"))(
         DIR.gen.joinpath("state", "working", "examplepythoncode.py")
     ).in_dir(DIR.gen.joinpath("state", "working")).run()
+
+
+@expected(dirtemplate.exceptions.DirTemplateException)
+def readmegen():
+    """
+    Build README.md and CHANGELOG.md.
+    """
+    import hitchpylibrarytoolkit
+    hitchpylibrarytoolkit.readmegen(
+        _storybook({}), DIR.project, DIR.key / "story", DIR.gen, PROJECT_NAME
+    )
