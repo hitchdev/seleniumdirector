@@ -65,7 +65,7 @@ Overlay - should_be_on_top:
           code: |
             director.visit("http://localhost:8000")
             director.wait_for_page("dashboard")
-            director.the("message").should_be_on_top(after=0.5)
+            director.the("message").should_be_on_top(after=0.2)
             director.the("message").click()
           raises:
             type: seleniumdirector.exceptions.ElementCoveredByAnotherElement
