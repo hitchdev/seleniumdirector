@@ -364,7 +364,7 @@ def docgen():
             include_title=True,
             readme=False,
             quickstart=_storybook({})
-            .in_filename(DIR.key / "html-ids.story")
+            .in_filename(DIR.key / "story" / "quickstart.story")
             .non_variations()
             .ordered_by_file(),
         )
