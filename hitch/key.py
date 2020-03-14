@@ -19,8 +19,10 @@ from path import Path
 import hitchbuildpy
 import dirtemplate
 import signal
+import hitchpylibrarytoolkit
 
 PROJECT_NAME = "seleniumdirector"
+
 
 def project_build(paths, python_version, selenium_version=None):
     pylibrary = (
@@ -45,6 +47,7 @@ def project_build(paths, python_version, selenium_version=None):
 
 class Engine(BaseEngine):
     """Python engine for running tests."""
+
     given_definition = GivenDefinition(
         python_version=GivenProperty(Str()),
         selenium_version=GivenProperty(Str()),
@@ -59,7 +62,6 @@ class Engine(BaseEngine):
         status=InfoProperty(schema=Enum(["experimental", "stable"])),
         docs=InfoProperty(schema=Str()),
     )
-
 
     def __init__(self, keypath, settings):
         self.path = keypath
@@ -338,40 +340,9 @@ def docgen():
     """
     Build documentation.
     """
-
-    def title(dirfile):
-        assert len(dirfile.text().split("---")) >= 3, "{} doesn't have ---".format(
-            dirfile
-        )
-        return load(dirfile.text().split("---")[1]).data.get("title", "misc")
-
-    docfolder = DIR.gen / "docs"
-
-    if docfolder.exists():
-        docfolder.rmtree(ignore_errors=True)
-    docfolder.mkdir()
-
-    template = (
-        dirtemplate.DirTemplate("docs", DIR.project / "docs", DIR.gen)
-        .with_files(
-            template_story_jinja2={
-                "using/alpha/{0}.md".format(story.info["docs"]): {"story": story}
-                for story in _storybook({}).ordered_by_name()
-                if "docs" in story.info
-            }
-        )
-        .with_vars(
-            include_title=True,
-            readme=False,
-            quickstart=_storybook({})
-            .in_filename(DIR.key / "story" / "quickstart.story")
-            .non_variations()
-            .ordered_by_file(),
-        )
-        .with_functions(title=title)
+    hitchpylibrarytoolkit.docgen(
+        _storybook({}), DIR.project, DIR.key / "story", DIR.gen
     )
-    template.ensure_built()
-    print("Docs generated")
 
 
 @expected(CommandError)
@@ -434,6 +405,7 @@ def readmegen():
     Build README.md and CHANGELOG.md.
     """
     import hitchpylibrarytoolkit
+
     hitchpylibrarytoolkit.readmegen(
         _storybook({}), DIR.project, DIR.key / "story", DIR.gen, PROJECT_NAME
     )
