@@ -1,27 +1,30 @@
 from hitchstory import StoryCollection, BaseEngine, HitchStoryException
-from hitchstory import validate, no_stacktrace_for
+from hitchstory import validate
 from hitchstory import GivenDefinition, GivenProperty, InfoDefinition, InfoProperty
 from hitchrun import expected
-from icommandlib import ICommand, ICommandError
-from commandlib import Command, CommandError, python, python_bin
+from commandlib import Command, CommandError, python
 from strictyaml import Str, Map, MapPattern, Bool, Enum, Optional, load
 from pathquery import pathquery
-from hitchrun import hitch_maintenance
 from hitchrun import DIR
 from hitchrun.decorators import ignore_ctrlc
 from hitchrunpy import (
     ExamplePythonCode,
-    HitchRunPyException,
     ExpectedExceptionMessageWasDifferent,
 )
-import requests
-from path import Path
 import hitchbuildpy
 import dirtemplate
 import signal
 import hitchpylibrarytoolkit
+from templex import Templex
+
 
 PROJECT_NAME = "seleniumdirector"
+
+
+toolkit = hitchpylibrarytoolkit.ProjectToolkit(
+    "seleniumdirector",
+    DIR,
+)
 
 
 def project_build(paths, python_version, selenium_version=None):
@@ -143,7 +146,7 @@ class Engine(BaseEngine):
             )
             try:
                 Templex(will_output).assert_match(actual_output)
-            except NonMatching:
+            except AssertionError:
                 if self.settings.get("rewrite"):
                     self.current_step.update(**{"will output": actual_output})
                 else:
@@ -174,7 +177,7 @@ class Engine(BaseEngine):
 
             try:
                 result.exception_was_raised(exception_type, message)
-            except ExpectedExceptionMessageWasDifferent as error:
+            except ExpectedExceptionMessageWasDifferent:
                 if self.settings.get("rewrite") and not differential:
                     new_raises = raises.copy()
                     new_raises["message"] = result.exception.message
@@ -280,26 +283,8 @@ def lint():
     """
     Lint all code.
     """
-    python("-m", "flake8")(
-        DIR.project.joinpath("seleniumdirector"),
-        "--max-line-length=100",
-        "--exclude=__init__.py",
-    ).run()
-    """
-    python("-m", "flake8")(
-        DIR.key.joinpath("key.py"),
-        "--max-line-length=100",
-        "--exclude=__init__.py",
-    ).run()
-    """
+    toolkit.lint(exclude=["__init__.py"])
     print("Lint success!")
-
-
-def hitch(*args):
-    """
-    Use 'h hitch --help' to get help on these commands.
-    """
-    hitch_maintenance(*args)
 
 
 def deploy(version):
@@ -340,9 +325,7 @@ def docgen():
     """
     Build documentation.
     """
-    hitchpylibrarytoolkit.docgen(
-        _storybook({}), DIR.project, DIR.key / "story", DIR.gen
-    )
+    toolkit.docgen(Engine(DIR, {}))
 
 
 @expected(CommandError)
@@ -375,12 +358,11 @@ def hvenvup(package, directory):
     pip("install", DIR.project.joinpath(directory).abspath()).run()
 
 
-def black():
+def reformat():
     """
     Reformat the code.
     """
-    python_bin.black(DIR.project / "seleniumdirector").run()
-    python_bin.black(DIR.key / "key.py").run()
+    toolkit.reformat()
 
 
 def runserver():
@@ -404,8 +386,4 @@ def readmegen():
     """
     Build README.md and CHANGELOG.md.
     """
-    import hitchpylibrarytoolkit
-
-    hitchpylibrarytoolkit.readmegen(
-        _storybook({}), DIR.project, DIR.key / "story", DIR.gen, PROJECT_NAME
-    )
+    toolkit.docgen(Engine(DIR, {}))
