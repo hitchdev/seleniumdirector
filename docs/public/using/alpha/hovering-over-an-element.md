@@ -1,7 +1,6 @@
 
 ---
 title: Hover - hovering over an element
-type: using
 ---
 
 
@@ -91,6 +90,8 @@ director.the("revealed element").should_be_on_page()
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/hover.story">hover.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/hover.story">hover.story</a>..
+

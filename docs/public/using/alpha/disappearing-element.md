@@ -1,7 +1,6 @@
 
 ---
 title: Element should not be on page
-type: using
 ---
 
 
@@ -116,6 +115,8 @@ overlay still on page after 0.5 seconds.
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/element-should-not-be-present.story">element-should-not-be-present.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/element-should-not-be-present.story">element-should-not-be-present.story</a>..
+

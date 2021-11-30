@@ -1,7 +1,6 @@
 
 ---
 title: Selector for element inside iframe
-type: using
 ---
 
 
@@ -119,6 +118,8 @@ driver.quit()
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/iframe.story">iframe.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/iframe.story">iframe.story</a>..
+

@@ -1,7 +1,6 @@
 
 ---
 title: Using a selenium element object
-type: using
 ---
 
 
@@ -133,6 +132,8 @@ driver.quit()
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/using-selenium-element-object.story">using-selenium-element-object.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/using-selenium-element-object.story">using-selenium-element-object.story</a>..
+

@@ -1,7 +1,6 @@
 
 ---
 title: Selectors with HTML classes
-type: using
 ---
 
 
@@ -162,6 +161,8 @@ driver.quit()
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/html-classes.story">html-classes.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/html-classes.story">html-classes.story</a>..
+

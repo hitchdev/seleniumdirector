@@ -1,7 +1,6 @@
 
 ---
 title: Sub-elements
-type: using
 ---
 
 
@@ -108,6 +107,8 @@ selector.the("founder table / bill gates / age").should_contain("35")
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/sub-elements.story">sub-elements.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/sub-elements.story">sub-elements.story</a>..
+

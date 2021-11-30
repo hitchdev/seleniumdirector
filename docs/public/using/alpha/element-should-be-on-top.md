@@ -1,7 +1,6 @@
 
 ---
 title: Overlay - should_be_on_top
-type: using
 ---
 
 
@@ -117,6 +116,8 @@ Another element, a 'td' with id '' and class '' is covering yours '//*[@id='id_d
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/overlay.story">overlay.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/overlay.story">overlay.story</a>..
+

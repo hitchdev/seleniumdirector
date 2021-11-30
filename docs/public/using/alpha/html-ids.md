@@ -1,7 +1,6 @@
 
 ---
 title: Selectors with HTML IDs
-type: using
 ---
 
 
@@ -141,6 +140,8 @@ More than one element matches your query '//*[@id='id_dashboard_message']'.
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/quickstart.story">quickstart.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/quickstart.story">quickstart.story</a>..
+

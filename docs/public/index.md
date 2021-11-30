@@ -2,7 +2,11 @@
 title: SeleniumDirector
 ---
 
-{{< github-stars user="hitchdev" project="seleniumdirector" >}}
+
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/hitchdev/seleniumdirector?style=social"> 
+<img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/seleniumdirector">
+
+
 
 
 

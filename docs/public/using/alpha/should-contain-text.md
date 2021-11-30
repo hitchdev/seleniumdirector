@@ -1,7 +1,6 @@
 
 ---
 title: Should contain text
-type: using
 ---
 
 
@@ -115,6 +114,8 @@ after timeout of 5 seconds.
 
 
 
-{{< note title="Executable specification" >}}
-Page automatically generated from <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/should-contain-text.story">should-contain-text.story</a>.
-{{< /note >}}
+!!! note "Executable specification"
+
+    Documentation automatically generated from 
+    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/should-contain-text.story">should-contain-text.story</a>..
+
