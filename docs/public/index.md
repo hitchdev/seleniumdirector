@@ -182,13 +182,7 @@ with [hitchstory](https://hitchdev.com/hitchstory/).
 Either install hitchkey with [pipsi](https://github.com/mitsuhiko/pipsi):
 
 ```bash
-pipsi install hitchkey
-```
-
-Or, if you'd prefer, you can safely install with "sudo pip" (deactivate any virtualenvs you're in):
-
-```bash
-sudo pip install hitchkey
+pipx install hitchkey
 ```
 
 Once hitchkey is installed:
@@ -207,25 +201,26 @@ hk bdd logged in
 
 ## Using SeleniumDirector
 
-- [Selector for element inside iframe](using/alpha/)
-- [Sub-elements](using/alpha/)
-- [Selectors with HTML classes](using/alpha/)
-- [With HTML attributes](using/alpha/)
-- [Overlay - should_be_on_top](using/alpha/)
-- [Element should not be on page](using/alpha/)
-- [Selectors using HTML contents](using/alpha/)
-- [Using a selenium element object](using/alpha/)
-- [Hover - hovering over an element](using/alpha/)
-- [Should contain text](using/alpha/)
-- [Selectors with HTML IDs](using/alpha/)
+- [With HTML attributes](using/alpha/attributes)
+- [Element should not be on page](using/alpha/disappearing-element)
+- [Overlay - should_be_on_top](using/alpha/element-should-be-on-top)
+- [Hover - hovering over an element](using/alpha/hovering-over-an-element)
+- [Selectors with HTML classes](using/alpha/html-classes)
+- [Selectors using HTML contents](using/alpha/html-element-contents)
+- [Selectors with HTML IDs](using/alpha/html-ids)
+- [Selector for element inside iframe](using/alpha/iframe)
+- [Should contain text](using/alpha/should-contain-text)
+- [Sub-elements](using/alpha/subelements)
+- [Using a selenium element object](using/alpha/using-selenium-element-object)
 
 
 
 ## Why not X instead?
 
-- [Why not use Robot SeleniumLibrary?](why-not/)
-- [Why not use the page object pattern?](why-not/)
-- [Why not use Capybara-Py or Splinter?](why-not/)
+- [Why not use Capybara-Py or Splinter?](why-not/capybara-py-or-splinter)
+- [Why not use the page object pattern?](why-not/page-object)
+- [Why not use Robot SeleniumLibrary?](why-not/robot)
+
 
 
 

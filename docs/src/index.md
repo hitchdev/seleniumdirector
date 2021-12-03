@@ -49,13 +49,7 @@ with [hitchstory](https://hitchdev.com/hitchstory/).
 Either install hitchkey with [pipsi](https://github.com/mitsuhiko/pipsi):
 
 ```bash
-pipsi install hitchkey
-```
-
-Or, if you'd prefer, you can safely install with "sudo pip" (deactivate any virtualenvs you're in):
-
-```bash
-sudo pip install hitchkey
+pipx install hitchkey
 ```
 
 Once hitchkey is installed:
@@ -74,16 +68,17 @@ hk bdd logged in
 
 ## Using SeleniumDirector
 
-{% for dirfile in subdir("using/alpha/").is_not_dir() - subdir("using/alpha/").named("index.md") -%}
-- [{{ title(dirfile) }}](using/alpha/{{ dirfile.namebase }})
+{% for dirfile in (subdir("using/alpha/").is_not_dir() - subdir("using/alpha/").named("index.md"))|sort() -%}
+- [{{ title(dirfile) }}](using/alpha/{{ dirfile.name.splitext()[0] }})
 {% endfor %}
 
 
 ## Why not X instead?
 
-{% for dirfile in subdir("why-not").is_not_dir() - subdir("why-not").named("index.md") -%} 
-- [{{ title(dirfile) }}](why-not/{{ dirfile.namebase }})
+{% for dirfile in (subdir("why-not").is_not_dir() - subdir("why-not").named("index.md"))|sort() -%}
+- [{{ title(dirfile) }}](why-not/{{ dirfile.name.splitext()[0] }})
 {% endfor %}
+
 
 
 ## Contributors:
