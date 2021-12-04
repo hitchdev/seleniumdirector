@@ -24,4 +24,10 @@ The user can search for flights
 
 Example taken from https://www.blazemeter.com/blog/robot-framework-the-ultimate-guide-to-running-your-tests
 
-[ TODO : Two concerns smushed together ]
+This combines selectors with the natural flow of the user story, making what should be
+an easy to read story a confusing mix of code and story.
+
+SeleniumDirector combined with HitchStory naturally separates these concerns.
+
+Selectors are kept in a separate file from the story, so that the story is more readable
+and the selectors can be edited independently.
