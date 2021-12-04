@@ -125,5 +125,5 @@ driver.quit()
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/html-element-contents.story">html-element-contents.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/html-element-contents.story">html-element-contents.story</a>..
 

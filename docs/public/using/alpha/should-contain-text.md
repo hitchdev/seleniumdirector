@@ -117,5 +117,5 @@ after timeout of 5 seconds.
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/should-contain-text.story">should-contain-text.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/should-contain-text.story">should-contain-text.story</a>..
 

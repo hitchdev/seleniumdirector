@@ -93,5 +93,5 @@ director.the("revealed element").should_be_on_page()
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/hover.story">hover.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/hover.story">hover.story</a>..
 

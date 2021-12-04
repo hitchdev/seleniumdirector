@@ -119,5 +119,5 @@ Another element, a 'td' with id '' and class '' is covering yours '//*[@id='id_d
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/overlay.story">overlay.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/overlay.story">overlay.story</a>..
 

@@ -110,5 +110,5 @@ selector.the("founder table / bill gates / age").should_contain("35")
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/sub-elements.story">sub-elements.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/sub-elements.story">sub-elements.story</a>..
 

@@ -121,5 +121,5 @@ driver.quit()
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/iframe.story">iframe.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/iframe.story">iframe.story</a>..
 

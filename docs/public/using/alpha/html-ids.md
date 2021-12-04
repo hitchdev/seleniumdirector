@@ -143,5 +143,5 @@ More than one element matches your query '//*[@id='id_dashboard_message']'.
 !!! note "Executable specification"
 
     Documentation automatically generated from 
-    <a href="https://github.com/hitchdev/hitchstory/blob/master/hitch/quickstart.story">quickstart.story</a>..
+    <a href="https://github.com/hitchdev/seleniumdirector/blob/master/hitch/story/quickstart.story">quickstart.story</a>..
 
